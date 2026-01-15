@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Python. Розгалуження (iframe-safe)</title>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 10px auto;
+    line-height: 1.6;
+  }
+  h1, h2, h3 { color: #2c3e50; }
+  textarea { width: 100%; height: 140px; font-family: monospace; font-size: 14px; }
+  input[type="number"] { width: 100px; padding: 5px; font-size: 16px; }
+  button { padding: 8px 16px; margin-top: 10px; font-size: 16px; cursor: pointer; }
+  pre { background: #f4f4f4; padding: 10px; min-height: 60px; }
+  .task { background: #eef6ff; padding: 15px; margin-top: 20px; border-left: 5px solid #3498db; }
+</style>
+</head>
+<body>
+
+<h1>Python. Розгалуження (if / elif / else)</h1>
+
+<p>Розгалуження дозволяє програмі виконувати різні дії залежно від умови.</p>
+<pre>
+if умова:
+    команда
+elif інша_умова:
+    інша_команда
+else:
+    команда_якщо_всі_умови_хибні
+</pre>
+
+<div class="task">
+<h3>Практичне завдання</h3>
+<p>Введи число і визнач, чи воно додатне, від’ємне або нуль.</p>
+</div>
+
+<label>Введи число: <input type="number" id="inputNumber" value="0"></label>
+
+<textarea id="code">
+x = int(input_value)
+
+if x > 0:
+    print("Додатне")
+elif x < 0:
+    print("Від’ємне")
+else:
+    print("Нуль")
+</textarea>
+
+<br>
+<button onclick="runCode()">▶ Запустити код</button>
+
+<h3>Результат</h3>
+<pre id="output"></pre>
+
+<script>
+let pyodideReady = false;
+let pyodide;
+
+async function runCode() {
+  const output = document.getElementById("output");
+  output.textContent = "Виконується...";
+  if (!pyodideReady) {
+    pyodide = await loadPyodide();
+    pyodideReady = true;
+  }
+
+  try {
+    const input_value = document.getElementById("inputNumber").value;
+
+    pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+`);
+
+    pyodide.globals.set("input_value", input_value);
+    const code = document.getElementById("code").value;
+    await pyodide.runPythonAsync(code);
+    const result = pyodide.runPython("sys.stdout.getvalue()");
+    output.textContent = result || "(немає виводу)";
+
+  } catch (err) {
+    output.textContent = err;
+  }
+}
+</script>
+
+</body>
+</html>
