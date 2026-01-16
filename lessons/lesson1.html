@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Python | Розгалуження — Інтерактивний урок</title>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
@@ -146,35 +146,8 @@ n = int(input())
 <pre class="output"></pre>
 </div>
 
-<script>
-let pyodide;
-
-async function initPy() {
-  if (!pyodide) pyodide = await loadPyodide();
-}
-
-async function execute(code, task) {
-  await initPy();
-  pyodide.runPython(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-`);
-
-  const inputs = task.querySelectorAll(".user-input");
-  let idx = 0;
-  pyodide.globals.set("input", () => inputs[idx++].value);
-
-  await pyodide.runPythonAsync(code);
-  const output = pyodide.runPython("sys.stdout.getvalue()");
-  let result = null;
-  try { result = pyodide.runPython("result"); } catch {}
-  return { output, result };
-}
-
-
-
-</script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+<script src="js/course.js"></script>
 
 </body>
 </html>
