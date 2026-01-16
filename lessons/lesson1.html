@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-<meta charset="UTF-8">
-<title>Python | Розгалуження — Інтерактивний урок</title>
-
-<link rel="stylesheet" href="../css/style.css">
-</head>
-
-<body>
 
 <h1>Python. Розгалуження (if / elif / else)</h1>
 
@@ -29,6 +19,7 @@ else:
 
 <!-- ================= TASK 1 (1 input) ================= -->
 <div class="task easy"
+    data-lesson-id="lesson1"
      data-tests='[{"input":["5"],"expected":"positive"},{"input":["-3"],"expected":"negative"},{"input":["0"],"expected":"zero"}]'>
 <h3>Завдання 1 <span class="level">(Початковий)</span></h3>
 <p>Визнач, чи число додатне, від’ємне або нуль.</p>
@@ -47,6 +38,7 @@ x = int(input())
 
 <!-- ================= TASK 2 (1 input) ================= -->
 <div class="task easy"
+       data-lesson-id="lesson1"
      data-tests='[{"input":["4"],"expected":"even"},{"input":["7"],"expected":"odd"},{"input":["0"],"expected":"even"}]'>
 <h3>Завдання 2 <span class="level">(Початковий)</span></h3>
 <p>Визнач, чи число парне чи непарне.</p>
@@ -65,6 +57,7 @@ n = int(input())
 
 <!-- ================= TASK 3 (2 inputs) ================= -->
 <div class="task medium"
+       data-lesson-id="lesson1"
      data-tests='[{"input":["3","7"],"expected":"10"},{"input":["5","12"],"expected":"17"}]'>
 <h3>Завдання 3 <span class="level">(Середній)</span></h3>
 <p>Знайди суму двох чисел.</p>
@@ -87,6 +80,7 @@ print(result)
 
 <!-- ================= TASK 4 (3 inputs) ================= -->
 <div class="task medium"
+       data-lesson-id="lesson1"
      data-tests='[{"input":["2","3","5"],"expected":"10"},{"input":["1","1","1"],"expected":"3"}]'>
 <h3>Завдання 4 <span class="level">(Середній)</span></h3>
 <p>Знайди суму трьох чисел.</p>
@@ -112,6 +106,7 @@ print(result)
 
 <!-- ================= TASK 5 (1 input) ================= -->
 <div class="task hard"
+       data-lesson-id="lesson1"
      data-tests='[{"input":["90"],"expected":"A"},{"input":["75"],"expected":"B"},{"input":["40"],"expected":"F"}]'>
 <h3>Завдання 5 <span class="level">(Складний)</span></h3>
 <p>За балами визнач оцінку: 90+ → A, 75–89 → B, інакше → F</p>
@@ -130,6 +125,7 @@ score = int(input())
 
 <!-- ================= TASK 6 (1 input) ================= -->
 <div class="task hard"
+       data-lesson-id="lesson1"
      data-tests='[{"input":["15"],"expected":"FizzBuzz"},{"input":["3"],"expected":"Fizz"},{"input":["5"],"expected":"Buzz"},{"input":["2"],"expected":"None"}]'>
 <h3>Завдання 6 <span class="level">(Складний)</span></h3>
 <p>FizzBuzz: кратність 3 → "Fizz", 5 → "Buzz", 15 → "FizzBuzz", інакше → "None".</p>
@@ -145,9 +141,3 @@ n = int(input())
 <div class="hint">Спочатку перевіряй кратність 15, потім 3 та 5, результат у result.</div>
 <pre class="output"></pre>
 </div>
-
-<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
-<script src="js/course.js"></script>
-
-</body>
-</html>
