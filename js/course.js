@@ -1,3 +1,28 @@
+let pyodide;
+
+async function initPy() {
+  if (!pyodide) pyodide = await loadPyodide();
+}
+
+async function execute(code, task) {
+  await initPy();
+  pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+`);
+
+  const inputs = task.querySelectorAll(".user-input");
+  let idx = 0;
+  pyodide.globals.set("input", () => inputs[idx++].value);
+
+  await pyodide.runPythonAsync(code);
+  const output = pyodide.runPython("sys.stdout.getvalue()");
+  let result = null;
+  try { result = pyodide.runPython("result"); } catch {}
+  return { output, result };
+}
+
 const courseData = [
     {topic:"Основи Python", lessons:[
         {id:"lesson1", title:"Змінні та типи даних"},
