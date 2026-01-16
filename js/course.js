@@ -106,3 +106,10 @@ async function checkStudentCode(task){
     students[task.dataset.lessonId]={completedTasks:tests.length,totalTasks:tests.length};
     localStorage.setItem(`student_${email}`,JSON.stringify(students));
 }
+
+
+
+function toggleHint(btn) {
+  const hint = btn.closest(".task").querySelector(".hint");
+  hint.style.display = hint.style.display === "none" ? "block" : "none";
+}
