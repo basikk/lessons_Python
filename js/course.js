@@ -1,27 +1,4 @@
-let pyodide;
-
-async function initPy() {
-  if (!pyodide) pyodide = await loadPyodide();
-}
-
-async function execute(code, task) {
-  await initPy();
-  pyodide.runPython(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-`);
-
-  const inputs = task.querySelectorAll(".user-input");
-  let idx = 0;
-  pyodide.globals.set("input", () => inputs[idx++].value);
-
-  await pyodide.runPythonAsync(code);
-  const output = pyodide.runPython("sys.stdout.getvalue()");
-  let result = null;
-  try { result = pyodide.runPython("result"); } catch {}
-  return { output, result };
-}
+// course.js - оновлений для динамічного завантаження уроків у праву колонку
 
 const courseData = [
     {topic:"Основи Python", lessons:[
@@ -68,7 +45,10 @@ function buildLessonsList(){
         div.className="lesson-topic";
         const h3=document.createElement("h3");
         h3.textContent=topic.topic;
-        h3.onclick=()=>{ div.querySelector("ol").style.display = div.querySelector("ol").style.display==="none"?"block":"none"; };
+        h3.onclick=()=>{ 
+            const ol=div.querySelector("ol");
+            ol.style.display = ol.style.display==="none"?"block":"none"; 
+        };
         div.appendChild(h3);
 
         const ol=document.createElement("ol");
@@ -83,8 +63,12 @@ function buildLessonsList(){
                 const prevLessonId=flatLessons[prevIndex].id;
                 unlocked=studentData[prevLessonId] && studentData[prevLessonId].completedTasks===studentData[prevLessonId].totalTasks;
             }
-            if(!unlocked){ li.className="locked"; } 
-            else { a.href=`lessons/${lesson.id}.html`; }
+            if(!unlocked){ 
+                li.className="locked"; 
+            } else { 
+                a.href="#";
+                a.onclick=(e)=>{ e.preventDefault(); loadLesson(lesson.id); }
+            }
             li.appendChild(a);
             ol.appendChild(li);
         });
@@ -95,6 +79,20 @@ function buildLessonsList(){
 
 if(current) buildLessonsList();
 
+// Динамічне завантаження уроку у праву колонку
+function loadLesson(lessonId){
+    fetch(`lessons/${lessonId}.html`)
+        .then(response => response.text())
+        .then(html=>{
+            document.getElementById("content").innerHTML = html;
+        })
+        .catch(err=>{
+            document.getElementById("content").innerHTML = "<p>Помилка завантаження уроку.</p>";
+            console.error(err);
+        });
+}
+
+// Pyodide та запуск/перевірка коду учня
 let pyodideReady=false;
 async function initPy(){ if(!pyodideReady){ window.pyodide=await loadPyodide(); pyodideReady=true; } }
 async function runStudentCode(task){
@@ -130,11 +128,4 @@ async function checkStudentCode(task){
     const students=JSON.parse(localStorage.getItem(`student_${email}`));
     students[task.dataset.lessonId]={completedTasks:tests.length,totalTasks:tests.length};
     localStorage.setItem(`student_${email}`,JSON.stringify(students));
-}
-
-
-
-function toggleHint(btn) {
-  const hint = btn.closest(".task").querySelector(".hint");
-  hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
