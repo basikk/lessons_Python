@@ -5,82 +5,132 @@
 <title>Курс Python 9 клас | Головна</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-body { font-family: Arial, sans-serif; max-width: 1000px; margin: 20px auto; line-height: 1.6; }
-h1, h2, h3 { color: #2c3e50; }
-input[type="email"] { width: 300px; padding: 5px; margin-right: 10px; }
-button { padding: 6px 12px; cursor: pointer; }
-#lessons ul { list-style: none; padding: 0; }
-#lessons li { margin-bottom: 8px; }
-.progress-bar { width: 100%; background: #f1f1f1; border-radius: 6px; overflow: hidden; height: 20px; margin-top: 10px; }
+body { font-family: Arial, sans-serif; margin: 0; height: 100vh; display: flex; }
+#sidebar { width: 300px; background: #f4f4f4; padding: 20px; overflow-y: auto; border-right: 1px solid #ccc; }
+#content { flex: 1; padding: 20px; overflow-y: auto; }
+h1, h2 { color: #2c3e50; margin-top: 0; }
+
+/* Прогрес-бар */
+.progress-bar { width: 100%; background: #ddd; border-radius: 6px; overflow: hidden; height: 20px; margin-bottom: 20px; }
 .progress-fill { height: 100%; background: #2ecc71; width: 0%; text-align: center; color: white; line-height: 20px; font-weight: bold; }
+
+/* Список уроків */
+.lesson-topic { margin-bottom: 10px; }
+.lesson-topic > h3 { cursor: pointer; margin: 5px 0; }
+.lesson-topic ul { list-style: none; padding-left: 15px; display: none; }
+.lesson-topic ul li { margin-bottom: 5px; }
+.lesson-topic ul li a { text-decoration: none; color: #34495e; }
+.lesson-topic ul li.locked { opacity: 0.4; pointer-events: none; }
+
+/* Активний урок */
+#content h2 { margin-top: 0; }
+
+button { padding: 5px 10px; cursor: pointer; margin-top: 5px; }
 </style>
 </head>
 <body>
 
-<h1>Курс Python для 9 класу</h1>
-
-<!-- Логін учня -->
-<div id="login">
-    <h2>Вхід учня</h2>
-    <input type="email" id="email" placeholder="Введіть email">
-    <button onclick="loginStudent()">Увійти</button>
-</div>
-
-<!-- Список уроків та прогрес -->
-<div id="lessons" style="display:none;">
-    <h2>Уроки</h2>
-    <ul>
-        <li><a href="lessons/lesson1.html">Урок 1: Змінні та типи даних</a></li>
-        <li><a href="lessons/lesson2.html">Урок 2: Лінійні алгоритми</a></li>
-        <li><a href="lessons/lesson3.html">Урок 3: Алгоритми розгалужень</a></li>
-    </ul>
-
-    <h3>Загальний прогрес курсу</h3>
+<div id="sidebar">
+    <h2>Прогрес курсу</h2>
     <div class="progress-bar">
         <div class="progress-fill" id="course-progress">0%</div>
     </div>
+
+    <div id="lessons-list">
+        <!-- Тут JS додасть теми та уроки -->
+    </div>
+</div>
+
+<div id="content">
+    <h1>Ласкаво просимо до курсу Python 9 класу!</h1>
+    <p>Виберіть урок зліва, щоб почати навчання.</p>
 </div>
 
 <script src="js/course.js"></script>
 <script>
-function loginStudent() {
-    const email = document.getElementById("email").value.trim().toLowerCase();
-    if (!email) { alert("Введіть email!"); return; }
-    localStorage.setItem("currentStudent", email);
-    if (!localStorage.getItem(`student_${email}`)) {
-        localStorage.setItem(`student_${email}`, JSON.stringify({}));
+// --- Дані уроків та тем ---
+const courseData = [
+    {
+        topic: "Основи Python",
+        lessons: [
+            {id:"lesson1", title:"Змінні та типи даних"},
+            {id:"lesson2", title:"Лінійні алгоритми"}
+        ]
+    },
+    {
+        topic: "Алгоритми розгалужень",
+        lessons: [
+            {id:"lesson3", title:"Алгоритми розгалужень"}
+        ]
     }
-    location.reload();
-}
+];
 
+// --- Поточний учень ---
 function getCurrentStudent() {
     const email = localStorage.getItem("currentStudent");
-    if (!email) { return null; }
+    if (!email) return null;
     return email;
 }
-
-// Показ уроків та прогрес після логіну
 const current = getCurrentStudent();
-if (current) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("lessons").style.display = "block";
-
-    const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
-    const lessons = ["lesson1","lesson2","lesson3"];
-    let totalTasks = 0;
-    let completedTasks = 0;
-    lessons.forEach(l => {
-        const p = studentData[l];
-        if (p) completedTasks += p.completedTasks || 0;
-        totalTasks += p ? p.totalTasks : 1;
-    });
-    const percent = Math.round((completedTasks / totalTasks) * 100);
-    const progressEl = document.getElementById("course-progress");
-    progressEl.style.width = percent + "%";
-    progressEl.textContent = percent + "%";
+if (!current) {
+    document.getElementById('content').innerHTML = "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
 }
+
+// --- Прогрес ---
+const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
+let totalTasks = 0, completedTasks = 0;
+courseData.forEach(topic => {
+    topic.lessons.forEach(l => {
+        const p = studentData[l.id];
+        totalTasks += p ? p.totalTasks : 1;
+        completedTasks += p ? p.completedTasks : 0;
+    });
+});
+const percent = Math.round((completedTasks / totalTasks) * 100);
+const progressEl = document.getElementById("course-progress");
+progressEl.style.width = percent + "%";
+progressEl.textContent = percent + "%";
+
+// --- Створення списку уроків ---
+const lessonsList = document.getElementById("lessons-list");
+courseData.forEach(topic => {
+    const div = document.createElement("div");
+    div.className = "lesson-topic";
+    const h3 = document.createElement("h3");
+    h3.textContent = topic.topic;
+    h3.onclick = () => {
+        const ul = div.querySelector("ul");
+        ul.style.display = ul.style.display === "none" ? "block" : "none";
+    };
+    div.appendChild(h3);
+
+    const ul = document.createElement("ul");
+    topic.lessons.forEach((lesson, index) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.textContent = lesson.title;
+
+        // Перевірка доступності уроку (попередні уроки повинні бути завершені)
+        const prevLessonIndex = courseData.flatMap(t => t.lessons).findIndex(l => l.id === lesson.id) - 1;
+        let unlocked = true;
+        if (prevLessonIndex >= 0) {
+            const prevLessonId = courseData.flatMap(t => t.lessons)[prevLessonIndex].id;
+            unlocked = studentData[prevLessonId] && studentData[prevLessonId].completedTasks === studentData[prevLessonId].totalTasks;
+        }
+
+        if (!unlocked) {
+            li.className = "locked";
+        } else {
+            a.href = "lessons/" + lesson.id + ".html";
+        }
+
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+    div.appendChild(ul);
+    lessonsList.appendChild(div);
+});
 </script>
 
 </body>
 </html>
-
