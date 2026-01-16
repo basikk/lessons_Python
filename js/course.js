@@ -97,7 +97,7 @@ let pyodideReady=false;
 async function initPy(){ if(!pyodideReady){ window.pyodide=await loadPyodide(); pyodideReady=true; } }
 
 
-async function runStudentCode(task){
+ window.runStudentCode =  async function runStudentCode(task){
     await initPy();
     const code=task.querySelector("textarea").value;
     const inputs=task.querySelectorAll(".user-input");
@@ -108,7 +108,7 @@ async function runStudentCode(task){
     catch(e){ task.querySelector(".output").textContent=e; }
 }
 
-async function checkStudentCode(task){
+window.runStudentCode = async function checkStudentCode(task){
     await initPy();
     const code=task.querySelector("textarea").value;
     const tests=JSON.parse(task.dataset.tests);
