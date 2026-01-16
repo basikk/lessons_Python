@@ -95,6 +95,8 @@ function loadLesson(lessonId){
 // Pyodide та запуск/перевірка коду учня
 let pyodideReady=false;
 async function initPy(){ if(!pyodideReady){ window.pyodide=await loadPyodide(); pyodideReady=true; } }
+
+
 async function runStudentCode(task){
     await initPy();
     const code=task.querySelector("textarea").value;
@@ -128,4 +130,9 @@ async function checkStudentCode(task){
     const students=JSON.parse(localStorage.getItem(`student_${email}`));
     students[task.dataset.lessonId]={completedTasks:tests.length,totalTasks:tests.length};
     localStorage.setItem(`student_${email}`,JSON.stringify(students));
+}
+
+function toggleHint(btn) {
+  const hint = btn.closest(".task").querySelector(".hint");
+  hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
