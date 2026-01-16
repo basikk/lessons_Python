@@ -1,95 +1,86 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>Python. Розгалуження (iframe-safe)</title>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+<title>Курс Python 9 клас | Головна</title>
+<link rel="stylesheet" href="css/style.css">
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: 10px auto;
-    line-height: 1.6;
-  }
-  h1, h2, h3 { color: #2c3e50; }
-  textarea { width: 100%; height: 140px; font-family: monospace; font-size: 14px; }
-  input[type="number"] { width: 100px; padding: 5px; font-size: 16px; }
-  button { padding: 8px 16px; margin-top: 10px; font-size: 16px; cursor: pointer; }
-  pre { background: #f4f4f4; padding: 10px; min-height: 60px; }
-  .task { background: #eef6ff; padding: 15px; margin-top: 20px; border-left: 5px solid #3498db; }
+body { font-family: Arial, sans-serif; max-width: 1000px; margin: 20px auto; line-height: 1.6; }
+h1, h2, h3 { color: #2c3e50; }
+input[type="email"] { width: 300px; padding: 5px; margin-right: 10px; }
+button { padding: 6px 12px; cursor: pointer; }
+#lessons ul { list-style: none; padding: 0; }
+#lessons li { margin-bottom: 8px; }
+.progress-bar { width: 100%; background: #f1f1f1; border-radius: 6px; overflow: hidden; height: 20px; margin-top: 10px; }
+.progress-fill { height: 100%; background: #2ecc71; width: 0%; text-align: center; color: white; line-height: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
 
-<h1>Python. Розгалуження (if / elif / else)</h1>
+<h1>Курс Python для 9 класу</h1>
 
-<p>Розгалуження дозволяє програмі виконувати різні дії залежно від умови.</p>
-<pre>
-if умова:
-    команда
-elif інша_умова:
-    інша_команда
-else:
-    команда_якщо_всі_умови_хибні
-</pre>
-
-<div class="task">
-<h3>Практичне завдання</h3>
-<p>Введи число і визнач, чи воно додатне, від’ємне або нуль.</p>
+<!-- Логін учня -->
+<div id="login">
+    <h2>Вхід учня</h2>
+    <input type="email" id="email" placeholder="Введіть email">
+    <button onclick="loginStudent()">Увійти</button>
 </div>
 
-<label>Введи число: <input type="number" id="inputNumber" value="0"></label>
+<!-- Список уроків та прогрес -->
+<div id="lessons" style="display:none;">
+    <h2>Уроки</h2>
+    <ul>
+        <li><a href="lessons/lesson1.html">Урок 1: Змінні та типи даних</a></li>
+        <li><a href="lessons/lesson2.html">Урок 2: Лінійні алгоритми</a></li>
+        <li><a href="lessons/lesson3.html">Урок 3: Алгоритми розгалужень</a></li>
+    </ul>
 
-<textarea id="code">
-x = int(input_value)
+    <h3>Загальний прогрес курсу</h3>
+    <div class="progress-bar">
+        <div class="progress-fill" id="course-progress">0%</div>
+    </div>
+</div>
 
-if x > 0:
-    print("Додатне")
-elif x < 0:
-    print("Від’ємне")
-else:
-    print("Нуль")
-</textarea>
-
-<br>
-<button onclick="runCode()">▶ Запустити код</button>
-
-<h3>Результат</h3>
-<pre id="output"></pre>
-
+<script src="js/course.js"></script>
 <script>
-let pyodideReady = false;
-let pyodide;
+function loginStudent() {
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    if (!email) { alert("Введіть email!"); return; }
+    localStorage.setItem("currentStudent", email);
+    if (!localStorage.getItem(`student_${email}`)) {
+        localStorage.setItem(`student_${email}`, JSON.stringify({}));
+    }
+    location.reload();
+}
 
-async function runCode() {
-  const output = document.getElementById("output");
-  output.textContent = "Виконується...";
-  if (!pyodideReady) {
-    pyodide = await loadPyodide();
-    pyodideReady = true;
-  }
+function getCurrentStudent() {
+    const email = localStorage.getItem("currentStudent");
+    if (!email) { return null; }
+    return email;
+}
 
-  try {
-    const input_value = document.getElementById("inputNumber").value;
+// Показ уроків та прогрес після логіну
+const current = getCurrentStudent();
+if (current) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("lessons").style.display = "block";
 
-    pyodide.runPython(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-`);
-
-    pyodide.globals.set("input_value", input_value);
-    const code = document.getElementById("code").value;
-    await pyodide.runPythonAsync(code);
-    const result = pyodide.runPython("sys.stdout.getvalue()");
-    output.textContent = result || "(немає виводу)";
-
-  } catch (err) {
-    output.textContent = err;
-  }
+    const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
+    const lessons = ["lesson1","lesson2","lesson3"];
+    let totalTasks = 0;
+    let completedTasks = 0;
+    lessons.forEach(l => {
+        const p = studentData[l];
+        if (p) completedTasks += p.completedTasks || 0;
+        totalTasks += p ? p.totalTasks : 1;
+    });
+    const percent = Math.round((completedTasks / totalTasks) * 100);
+    const progressEl = document.getElementById("course-progress");
+    progressEl.style.width = percent + "%";
+    progressEl.textContent = percent + "%";
 }
 </script>
 
 </body>
 </html>
+
