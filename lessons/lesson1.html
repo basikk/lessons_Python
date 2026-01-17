@@ -25,15 +25,18 @@ else:
 <p>Визнач, чи число додатне, від’ємне або нуль.</p>
 <label>Ввід:</label>
 <input class="user-input" type="number" value="0">
+
 <textarea>
 x = int(input())
 # обчисли знак числа і запиши у result
 </textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Використовуй if / elif / else і запиши результат у <code>result</code>.</div>
+
+<button data-action="run">▶ Запустити</button>
+<button data-action="check">✔ Перевірити</button>
+<button data-action="hint">💡 Підказка</button>
 <pre class="output"></pre>
+    <div class="hint hidden">Використовуй if / elif / else і запиши результат у <code>result</code>.</div>
+
 </div>
 
 <!-- ================= TASK 2 (1 input) ================= -->
