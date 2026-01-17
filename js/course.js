@@ -88,46 +88,46 @@ function updateCourseProgress() {
 //  ПОБУДОВА  СПИСОК УРОКІВ
 // -------------------------------
 
+/* ------------------------------
+   СПИСОК УРОКІВ
+-------------------------------- */
 function buildLessonsList() {
   if (!current) return;
 
-  // Беремо дані учня з localStorage
+  // Беремо дані учня
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
 
   const lessonsList = document.getElementById("lessons-list");
-  lessonsList.innerHTML = ""; // очищаємо перед побудовою списку
+  lessonsList.innerHTML = ""; // очищаємо весь список перед побудовою
 
-  // Проходимо по всіх темах курсу
+  // Перебираємо всі теми курсу
   courseData.forEach(topic => {
-    const div = document.createElement("div");
-    div.className = "lesson-topic";
+    const topicDiv = document.createElement("div");
+    topicDiv.className = "lesson-topic";
 
-    // Заголовок теми (натиск — показує/ховає список уроків)
+    // Заголовок теми (клік — показати/сховати уроки)
     const h3 = document.createElement("h3");
     h3.textContent = topic.topic;
-    h3.style.cursor = "pointer"; // вказуємо що можна клікати
+    h3.style.cursor = "pointer";
     h3.onclick = () => {
-      const ol = div.querySelector("ol");
+      const ol = topicDiv.querySelector("ol");
       if (ol) ol.style.display = ol.style.display === "none" ? "block" : "none";
     };
-    div.appendChild(h3);
+    topicDiv.appendChild(h3);
 
-    // Створюємо список уроків для цієї теми
+    // Створюємо список уроків
     const ol = document.createElement("ol");
-    ol.style.listStyle = "none"; // прибираємо стандартні маркери
-    ol.style.paddingLeft = "0";
-    ol.style.display = "block"; // відкрито за замовчуванням
+    ol.style.paddingLeft = "20px"; // для нумерації
+    ol.style.marginTop = "5px";
+    ol.style.marginBottom = "10px";
 
     topic.lessons.forEach((lesson, idx) => {
       const li = document.createElement("li");
 
-      // Створюємо посилання на урок
       const a = document.createElement("a");
+      a.textContent = `${idx + 1}. ${lesson.title}`; // нумерація + назва уроку
 
-      // Додаємо нумерацію і назву уроку у самому <a>
-      a.textContent = `${idx + 1}. ${lesson.title}`;
-
-      // Перевіряємо, чи урок розблоковано
+      // Перевірка чи урок розблоковано
       const flatLessons = courseData.flatMap(t => t.lessons);
       const lessonIndex = flatLessons.findIndex(l => l.id === lesson.id);
 
@@ -139,18 +139,17 @@ function buildLessonsList() {
       }
 
       if (!unlocked) {
-        li.className = "locked"; // заблокований урок
+        li.className = "locked";
         a.style.cursor = "not-allowed";
         a.style.color = "#999";
       } else {
-        // Якщо урок доступний — ставимо посилання
         a.href = "#";
         a.onclick = e => {
           e.preventDefault();
-          loadLesson(lesson.id); // завантажуємо урок у праву колонку
+          loadLesson(lesson.id);
         };
 
-        // Якщо урок завершено — додаємо клас для CSS галочки
+        // Якщо урок завершено, додаємо галочку
         if (studentData[lesson.id] &&
             studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
           a.classList.add("completed-lesson");
@@ -161,13 +160,14 @@ function buildLessonsList() {
       ol.appendChild(li);
     });
 
-    div.appendChild(ol);
-    lessonsList.appendChild(div);
+    topicDiv.appendChild(ol);
+    lessonsList.appendChild(topicDiv);
   });
 
-  // Після побудови оновлюємо прогрес-бар
+  // Оновлюємо прогрес-бар після побудови списку
   updateCourseProgress();
 }
+
 
 
 
