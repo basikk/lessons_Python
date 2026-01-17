@@ -11,7 +11,7 @@
 
 const courseData = [
   {topic:"Основи Python", lessons:[
-      {id:"lesson1", title:"Змінні та типи даних"},
+      {id:"lesson1", title:"Змінні та типи даних"}
       
   ]},
   {topic:"Основні алгоритмичні структури", lessons:[
