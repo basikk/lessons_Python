@@ -7,53 +7,46 @@
 </head>
 <body>
 
-<!-- ============================= -->
-<!-- ГОЛОВНИЙ КОНТЕЙНЕР ДЛЯ ДВОКОЛОНОЧНОЇ ВЕРСТКИ -->
-<!-- ============================= -->
 <div class="container">
 
   <!-- ============================= -->
-  <!-- ЛІВА КОЛОНКА: ЛОГІН + ПРОГРЕС + СПИСОК УРОКІВ -->
+  <!-- ЛІВА КОЛОНКА -->
   <!-- ============================= -->
   <div class="sidebar">
+    <h2>Логін учня</h2>
+    <div class="login">
+      <input type="email" id="email" placeholder="Введіть email">
+      <button onclick="loginStudent()">Увійти</button>
+    </div>
 
-      <!-- ЛОГІН УЧНЯ -->
-      <h2>Логін учня</h2>
-      <div class="login">
-          <input type="email" id="email" placeholder="Введіть email">
-          <button onclick="loginStudent()">Увійти</button>
-      </div>
+    <h2>Прогрес курсу</h2>
+    <div class="progress-wrapper">
+      <div class="progress-bar" id="course-progress">0%</div>
+    </div>
 
-      <!-- ПРОГРЕС-КУРСУ -->
-      <h2>Прогрес курсу</h2>
-      <div class="progress-wrapper">
-          <!-- Підсвічує відсоток пройдених завдань -->
-          <div class="progress-bar" id="course-progress">0%</div>
-      </div>
-
-      <!-- СПИСОК УРОКІВ -->
-      <div id="lessons-list">
-        <!-- JS (course.js) динамічно додає розкривні списки уроків -->
-      </div>
-
-  </div> <!-- /.sidebar -->
+    <h2>Уроки</h2>
+    <div id="lessons-list">
+      <!-- JS динамічно додає розкривні списки уроків -->
+    </div>
+  </div>
 
   <!-- ============================= -->
-  <!-- ПРАВА КОЛОНКА: ВМІСТ УРОКІВ -->
+  <!-- ПРАВА КОЛОНКА -->
   <!-- ============================= -->
   <div id="content">
-      <h1>Ласкаво просимо до курсу Python 9 класу!</h1>
-      <p>Виберіть урок зліва, щоб почати навчання.</p>
-  </div> <!-- /#content -->
+    <h1>Ласкаво просимо до курсу Python 9 класу!</h1>
+    <p>Виберіть урок зліва, щоб почати навчання.</p>
+  </div>
 
 </div> <!-- /.container -->
 
 <!-- ============================= -->
-<!-- ПІДКЛЮЧЕННЯ PYODIDE + КУРСОВИЙ JS -->
+<!-- ПІДКЛЮЧЕННЯ PYODIDE + JS КУРСУ -->
 <!-- ============================= -->
 <script src="https://cdn.jsdelivr.net/pyodide/v0.23.3/full/pyodide.js"></script>
 <script src="js/course.js"></script>
 
 </body>
 </html>
+
 
