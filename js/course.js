@@ -113,9 +113,11 @@ function buildLessonsList() {
     // Додаємо нумерацію уроків у темі
     topic.lessons.forEach((lesson, idx) => {
       const li = document.createElement("li");
-      li.textContent = `${idx + 1}. `; // нумерація
       const a = document.createElement("a");
-      a.textContent = lesson.title;
+     
+      // Додаємо нумерацію прямо в a
+      li.textContent = `${idx + 1}. `; // нумерація
+          
 
       // Перевірка, чи урок розблоковано
       const flatLessons = courseData.flatMap(t => t.lessons);
