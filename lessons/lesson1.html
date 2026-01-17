@@ -143,4 +143,65 @@ else:
     <pre class="output"></pre>
   </div>
 
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 3 -->
+  <!-- ============================= -->
+
+  <div class="task medium"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["10","5"], "expected":"10"},
+         {"input":["3","8"], "expected":"8"}
+       ]'>
+
+    <h2>Завдання 3. Більше ячсячсячсфіз двох чисел</h2>
+
+    <p>
+      Введіть два числа та виведіть більше з них.
+    </p>
+
+    <label>
+      Число A:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Число B:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+a = int(input())
+b = int(input())
+
+if a > b:
+    print(a)
+else:
+    print(b)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
+
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
+
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      <p>
+        Порівняй два числа за допомогою оператора <code>&gt;</code>.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  
 </section>
