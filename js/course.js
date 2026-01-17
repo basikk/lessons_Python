@@ -35,8 +35,7 @@ const courseData = [
 // ЛОГІН УЧНЯ
 // -------------------------------
 function loginStudent() {
-  const emailInput = document.getElementById("email");
-  const email = emailInput.value.trim().toLowerCase();
+    const email = document.getElementById("email").value.trim().toLowerCase();
 
   if (!email) {
     alert("Введіть email!");
@@ -51,11 +50,17 @@ function loginStudent() {
   }
 
   // після логіну оновлюємо інтерфейс без reload
-  initCourse();
+  location.reload();
 }
 
 function getCurrentStudent() {
   return localStorage.getItem("currentStudent");
+}
+
+const current = getCurrentStudent();
+if (!current) {
+  document.getElementById("content").innerHTML =
+    "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
 }
 
 // -------------------------------
@@ -115,21 +120,18 @@ function buildLessonsList() {
     // Заголовок теми (розкривний)
     const h3 = document.createElement("h3");
     h3.textContent = topic.topic;
-    h3.onclick = () => {
-      const ol = div.querySelector("ol");
-      ol.style.display = ol.style.display === "none" ? "block" : "none";
-    };
     div.appendChild(h3);
 
     // Список уроків у темі
     const ol = document.createElement("ol");
-    ol.classList.add("collapsed"); // сховане за замовчуванням
+    ol.classList.add("collapsed"); // сховане за замовчуванням  спочатку
 
     topic.lessons.forEach(lesson => {
       const li = document.createElement("li");
       const a = document.createElement("a");
       a.textContent = lesson.title;
 
+       // Розблокування уроку
       const flat = courseData.flatMap(t => t.lessons);
       const index = flat.findIndex(l => l.id === lesson.id);
 
@@ -140,9 +142,8 @@ function buildLessonsList() {
         unlocked = prev && prev.completedTasks === prev.totalTasks;
       }
 
-      if (!unlocked) {
-        li.className = "locked";
-      } else {
+      if (!unlocked)  li.className = "locked";
+      else {
         a.href = "#";
         a.onclick = e => {
           e.preventDefault();
@@ -161,12 +162,17 @@ function buildLessonsList() {
 
     div.appendChild(ol);
     lessonsList.appendChild(div);
-    h3.onclick = () => {
-  ol.classList.toggle("collapsed"); // один клік розкриває список
+
+    // Розкриття списку 1 кліком
+    h3.onclick = () => {  ol.classList.toggle("collapsed"); // один клік розкриває список
   });
 
   updateCourseProgress();
 }
+                     
+if (current) buildLessonsList();
+
+
 
 // -------------------------------
 // ЗАВАНТАЖЕННЯ УРОКУ
@@ -225,9 +231,6 @@ sys.stdout = StringIO()
   }
 }
 
-// -------------------------------
-// ПЕРЕВІРКА КОДУ
-// -------------------------------
 /* ------------------------------
    ПЕРЕВІРКА КОДУ
 -------------------------------- */
@@ -301,7 +304,3 @@ function toggleHint(btn) {
   hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
 
-// -------------------------------
-// ІНІЦІАЛІЗАЦІЯ ПРИ ЗАВАНТАЖЕННІ
-// -------------------------------
-initCourse();
