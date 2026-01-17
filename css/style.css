@@ -125,10 +125,6 @@ h1, h2, h3 {
 }
 
 /* Завершений урок */
-.lesson-topic li a.completed-lesson::before {
-  content: "✔ ";
-  color: #2ecc71;
-}
 
 .completed-lesson {
   color: #27ae60;
@@ -137,9 +133,10 @@ h1, h2, h3 {
 }
 
 .completed-lesson::after {
-  content: "✔";
-  color: #2ecc71;
+ content: "✔"; /* галочка */
+ color: green;
   margin-left: 5px;
+  font-weight: bold;
 }
 
 /* ==============================
