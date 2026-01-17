@@ -87,59 +87,70 @@ function updateCourseProgress() {
 // -------------------------------
 //  ПОБУДОВА  СПИСОК УРОКІВ
 // -------------------------------
+
 function buildLessonsList() {
-  const current = getCurrentStudent();
   if (!current) return;
 
+  // Беремо дані учня з localStorage
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
-  const lessonsList = document.getElementById("lessons-list");
-  lessonsList.innerHTML = ""; // очищаємо перед побудовою
 
+  const lessonsList = document.getElementById("lessons-list");
+  lessonsList.innerHTML = ""; // очищаємо перед побудовою списку
+
+  // Проходимо по всіх темах курсу
   courseData.forEach(topic => {
     const div = document.createElement("div");
     div.className = "lesson-topic";
 
-    // Заголовок теми (розкривний)
+    // Заголовок теми (натиск — показує/ховає список уроків)
     const h3 = document.createElement("h3");
     h3.textContent = topic.topic;
+    h3.style.cursor = "pointer"; // вказуємо що можна клікати
     h3.onclick = () => {
       const ol = div.querySelector("ol");
-      ol.style.display = ol.style.display === "none" ? "block" : "none";
+      if (ol) ol.style.display = ol.style.display === "none" ? "block" : "none";
     };
     div.appendChild(h3);
 
+    // Створюємо список уроків для цієї теми
     const ol = document.createElement("ol");
+    ol.style.listStyle = "none"; // прибираємо стандартні маркери
+    ol.style.paddingLeft = "0";
+    ol.style.display = "block"; // відкрито за замовчуванням
 
-    // Додаємо нумерацію уроків у темі
     topic.lessons.forEach((lesson, idx) => {
       const li = document.createElement("li");
+
+      // Створюємо посилання на урок
       const a = document.createElement("a");
-     
-      // Додаємо нумерацію прямо в a
-      li.textContent = `${idx + 1}. `; // нумерація
-          
 
-      // Перевірка, чи урок розблоковано
+      // Додаємо нумерацію і назву уроку у самому <a>
+      a.textContent = `${idx + 1}. ${lesson.title}`;
+
+      // Перевіряємо, чи урок розблоковано
       const flatLessons = courseData.flatMap(t => t.lessons);
-      const index = flatLessons.findIndex(l => l.id === lesson.id);
-      let unlocked = true;
+      const lessonIndex = flatLessons.findIndex(l => l.id === lesson.id);
 
-      if (index > 0) {
-        const prevId = flatLessons[index - 1].id;
+      let unlocked = true;
+      if (lessonIndex > 0) {
+        const prevId = flatLessons[lessonIndex - 1].id;
         const prev = studentData[prevId];
         unlocked = prev && prev.completedTasks === prev.totalTasks;
       }
 
       if (!unlocked) {
-        li.className = "locked"; // затемнення для заблокованих уроків
+        li.className = "locked"; // заблокований урок
+        a.style.cursor = "not-allowed";
+        a.style.color = "#999";
       } else {
+        // Якщо урок доступний — ставимо посилання
         a.href = "#";
         a.onclick = e => {
           e.preventDefault();
-          loadLesson(lesson.id);
+          loadLesson(lesson.id); // завантажуємо урок у праву колонку
         };
 
-        // Якщо урок завершено, додаємо зелений клас
+        // Якщо урок завершено — додаємо клас для CSS галочки
         if (studentData[lesson.id] &&
             studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
           a.classList.add("completed-lesson");
@@ -153,7 +164,11 @@ function buildLessonsList() {
     div.appendChild(ol);
     lessonsList.appendChild(div);
   });
+
+  // Після побудови оновлюємо прогрес-бар
+  updateCourseProgress();
 }
+
 
 
 
