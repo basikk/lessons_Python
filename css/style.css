@@ -156,9 +156,20 @@ body {
   margin-left: 6px;
 }
 
-.easy { border-left: 6px solid #2ecc71; }
-.medium { border-left: 6px solid #f39c12; }
-.hard { border-left: 6px solid #e74c3c; }
+/* =====================  ВІЗУАЛЬНА СКЛАДНІСТЬ ЗАВДАНЬ ================================ */
+
+.task.easy {
+  border-left: 6px solid #2ecc71; /* зелений */
+}
+
+.task.medium {
+  border-left: 6px solid #f39c12; /* оранжевий */
+}
+
+.task.hard {
+  border-left: 6px solid #e74c3c; /* червоний */
+}
+
 
 
 /* ---------- КОД ---------- */
