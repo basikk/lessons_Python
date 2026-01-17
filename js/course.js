@@ -123,6 +123,7 @@ function buildLessonsList() {
 
     // Список уроків у темі
     const ol = document.createElement("ol");
+    ol.classList.add("collapsed"); // сховане за замовчуванням
 
     topic.lessons.forEach(lesson => {
       const li = document.createElement("li");
@@ -160,6 +161,8 @@ function buildLessonsList() {
 
     div.appendChild(ol);
     lessonsList.appendChild(div);
+    h3.onclick = () => {
+  ol.classList.toggle("collapsed"); // один клік розкриває список
   });
 
   updateCourseProgress();
