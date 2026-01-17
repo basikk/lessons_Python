@@ -1,21 +1,28 @@
 // ================================
 // course.js — логіка курсу Python 9 клас
-// Працює з GitHub Pages + Pyodide
+// Сумісний з GitHub Pages + Pyodide
+// Підтримує:
+// - Вхід учня без перезавантаження
+// - Список уроків із темами та розблокуванням
+// - Підсвітку завершених уроків і завдань
+// - Прогрес-бар
+// - Плавне завантаження уроку (fade-in)
+// - Pyodide для запуску та перевірки коду
 // ================================
 
 /* ------------------------------
    ДАНІ ПРО КУРС
 -------------------------------- */
 const courseData = [
-  {topic:"Основи Python", lessons:[
-      {id:"lesson1", title:"Змінні та типи даних"}
+  { topic: "Основи Python", lessons: [
+      { id: "lesson1", title: "Змінні та типи даних" }
   ]},
-  {topic:"Основні алгоритмічні структури", lessons:[
-      {id:"lesson2", title:"Лінійні алгоритми"},
-      {id:"lesson3", title:"Алгоритми розгалужень"},
-      {id:"lesson4", title:"Цикли"},
-      {id:"lesson5", title:"Списки"},
-      {id:"lesson6", title:"Робота з функціями"}
+  { topic: "Основні алгоритмічні структури", lessons: [
+      { id: "lesson2", title: "Лінійні алгоритми" },
+      { id: "lesson3", title: "Алгоритми розгалужень" },
+      { id: "lesson4", title: "Цикли" },
+      { id: "lesson5", title: "Списки" },
+      { id: "lesson6", title: "Робота з функціями" }
   ]}
 ];
 
@@ -31,12 +38,17 @@ function loginStudent() {
 
   localStorage.setItem("currentStudent", email);
 
-  // Якщо нового учня, створюємо обʼєкт для зберігання прогресу
+  // Якщо нового учня, створюємо обʼєкт для прогресу
   if (!localStorage.getItem(`student_${email}`)) {
     localStorage.setItem(`student_${email}`, JSON.stringify({}));
   }
 
-  location.reload(); // перезавантажуємо, щоб побудувати список уроків
+  // Після входу будуємо список уроків та оновлюємо прогрес
+  buildLessonsList();
+  updateCourseProgress();
+
+  // Приховуємо форму логіну
+  document.querySelector(".login").style.display = "none";
 }
 
 function getCurrentStudent() {
@@ -49,6 +61,9 @@ const current = getCurrentStudent();
 if (!current) {
   document.getElementById("content").innerHTML =
     "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
+} else {
+  // Якщо вже є поточний учень, ховаємо форму логіну
+  document.querySelector(".login").style.display = "none";
 }
 
 /* ------------------------------
@@ -60,11 +75,13 @@ function updateCourseProgress() {
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
   let totalTasks = 0, completedTasks = 0;
 
-  courseData.forEach(topic => topic.lessons.forEach(l => {
-    const p = studentData[l.id];
-    totalTasks += p ? p.totalTasks : 1;
-    completedTasks += p ? p.completedTasks : 0;
-  }));
+  courseData.forEach(topic =>
+    topic.lessons.forEach(l => {
+      const p = studentData[l.id];
+      totalTasks += p ? p.totalTasks : 1;
+      completedTasks += p ? p.completedTasks : 0;
+    })
+  );
 
   const percent = Math.round((completedTasks / totalTasks) * 100);
   const progressEl = document.getElementById("course-progress");
@@ -103,6 +120,9 @@ function buildLessonsList() {
       const a = document.createElement("a");
       a.textContent = lesson.title;
 
+      // Додаємо id посиланню, щоб легко знайти пізніше
+      a.id = lesson.id;
+
       // Перевірка, чи урок розблоковано
       const flat = courseData.flatMap(t => t.lessons);
       const index = flat.findIndex(l => l.id === lesson.id);
@@ -140,8 +160,6 @@ function buildLessonsList() {
   updateCourseProgress();
 }
 
-if (current) buildLessonsList();
-
 /* ------------------------------
    ЗАВАНТАЖЕННЯ УРОКУ
 -------------------------------- */
@@ -152,7 +170,8 @@ function loadLesson(lessonId) {
       const content = document.getElementById("content");
       content.style.opacity = 0;
       content.innerHTML = html;
-      setTimeout(() => { content.style.opacity = 1; }, 50); // fade-in
+      // Плавне fade-in
+      setTimeout(() => { content.style.opacity = 1; }, 50);
     })
     .catch(() => {
       document.getElementById("content").innerHTML =
@@ -236,7 +255,7 @@ sys.stdout = StringIO()
     }
   }
 
-  // ✅ Тести пройдено
+  // ✅ Усі тести пройдено
   output.textContent = "✅ Усі тести пройдено!";
 
   const email = getCurrentStudent();
@@ -254,8 +273,7 @@ sys.stdout = StringIO()
   task.style.transition = "background-color 0.5s ease";
 
   // Додаємо зелений чек для уроку у лівій колонці
-  const lessonId = task.dataset.lessonId;
-  const lessonLink = document.querySelector(`#lessons-list a[href="#"][onclick*="${lessonId}"]`);
+  const lessonLink = document.getElementById(task.dataset.lessonId);
   if (lessonLink) lessonLink.classList.add("completed-lesson");
 
   // Оновлюємо прогрес-бар
@@ -269,3 +287,4 @@ function toggleHint(btn) {
   const hint = btn.closest(".task").querySelector(".hint");
   hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
+
