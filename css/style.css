@@ -132,7 +132,7 @@ h1, h2, h3 {
   position: relative;
 }
 
-.completed-lesson::before {
+.completed-lesson::after {
  content: "✔"; /* галочка */
  color: green;
   margin-left: 5px;
