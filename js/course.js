@@ -15,7 +15,7 @@ const courseData = [
       
   ]},
   {topic:"Основні алгоритмичні структури", lessons:[
-      {id:"lesson2", title:"Лінійні алгоритми"}
+      {id:"lesson2", title:"Лінійні алгоритми"},
       {id:"lesson3", title:"Алгоритми розгалужень"},
       {id:"lesson4", title:"Цикли"},
       {id:"lesson5", title:"Списки"},
