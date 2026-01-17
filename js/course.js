@@ -10,9 +10,14 @@
 // - Pyodide для запуску та перевірки коду
 // ================================
 
-/* ------------------------------
-   ДАНІ ПРО КУРС
--------------------------------- */
+// ================================
+// course.js — логіка курсу Python 9 клас
+// Працює з GitHub Pages + Pyodide
+// ================================
+
+// -------------------------------
+// ДАНІ ПРО КУРС
+// -------------------------------
 const courseData = [
   { topic: "Основи Python", lessons: [
       { id: "lesson1", title: "Змінні та типи даних" }
@@ -26,11 +31,13 @@ const courseData = [
   ]}
 ];
 
-/* ------------------------------
-   ЛОГІН УЧНЯ
--------------------------------- */
+// -------------------------------
+// ЛОГІН УЧНЯ
+// -------------------------------
 function loginStudent() {
-  const email = document.getElementById("email").value.trim().toLowerCase();
+  const emailInput = document.getElementById("email");
+  const email = emailInput.value.trim().toLowerCase();
+
   if (!email) {
     alert("Введіть email!");
     return;
@@ -38,50 +45,51 @@ function loginStudent() {
 
   localStorage.setItem("currentStudent", email);
 
-  // Якщо нового учня, створюємо обʼєкт для прогресу
+  // Якщо нового учня, створюємо об'єкт для прогресу
   if (!localStorage.getItem(`student_${email}`)) {
     localStorage.setItem(`student_${email}`, JSON.stringify({}));
   }
 
-  // Після входу будуємо список уроків та оновлюємо прогрес
-  buildLessonsList();
-  updateCourseProgress();
-
-  // Приховуємо форму логіну
-  document.querySelector(".login").style.display = "none";
+  // після логіну оновлюємо інтерфейс без reload
+  initCourse();
 }
 
 function getCurrentStudent() {
   return localStorage.getItem("currentStudent");
 }
 
-const current = getCurrentStudent();
+// -------------------------------
+// ІНІЦІАЛІЗАЦІЯ КУРСУ
+// -------------------------------
+function initCourse() {
+  const current = getCurrentStudent();
+  const contentEl = document.getElementById("content");
 
-// Якщо учень ще не ввійшов — показуємо повідомлення
-if (!current) {
-  document.getElementById("content").innerHTML =
-    "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
-} else {
-  // Якщо вже є поточний учень, ховаємо форму логіну
-  document.querySelector(".login").style.display = "none";
+  if (!current) {
+    contentEl.innerHTML = "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
+    return;
+  }
+
+  // будуємо список уроків і прогрес
+  buildLessonsList();
+  updateCourseProgress();
 }
 
-/* ------------------------------
-   ПРОГРЕС-БАР
--------------------------------- */
+// -------------------------------
+// ПРОГРЕС-БАР
+// -------------------------------
 function updateCourseProgress() {
+  const current = getCurrentStudent();
   if (!current) return;
 
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
   let totalTasks = 0, completedTasks = 0;
 
-  courseData.forEach(topic =>
-    topic.lessons.forEach(l => {
-      const p = studentData[l.id];
-      totalTasks += p ? p.totalTasks : 1;
-      completedTasks += p ? p.completedTasks : 0;
-    })
-  );
+  courseData.forEach(topic => topic.lessons.forEach(l => {
+    const p = studentData[l.id];
+    totalTasks += p ? p.totalTasks : 1;
+    completedTasks += p ? p.completedTasks : 0;
+  }));
 
   const percent = Math.round((completedTasks / totalTasks) * 100);
   const progressEl = document.getElementById("course-progress");
@@ -89,10 +97,11 @@ function updateCourseProgress() {
   progressEl.textContent = percent + "%";
 }
 
-/* ------------------------------
-   СПИСОК УРОКІВ
--------------------------------- */
+// -------------------------------
+// СПИСОК УРОКІВ
+// -------------------------------
 function buildLessonsList() {
+  const current = getCurrentStudent();
   if (!current) return;
 
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
@@ -120,10 +129,6 @@ function buildLessonsList() {
       const a = document.createElement("a");
       a.textContent = lesson.title;
 
-      // Додаємо id посиланню, щоб легко знайти пізніше
-      a.id = lesson.id;
-
-      // Перевірка, чи урок розблоковано
       const flat = courseData.flatMap(t => t.lessons);
       const index = flat.findIndex(l => l.id === lesson.id);
 
@@ -160,9 +165,9 @@ function buildLessonsList() {
   updateCourseProgress();
 }
 
-/* ------------------------------
-   ЗАВАНТАЖЕННЯ УРОКУ
--------------------------------- */
+// -------------------------------
+// ЗАВАНТАЖЕННЯ УРОКУ
+// -------------------------------
 function loadLesson(lessonId) {
   fetch(`lessons/${lessonId}.html`)
     .then(r => r.text())
@@ -170,8 +175,7 @@ function loadLesson(lessonId) {
       const content = document.getElementById("content");
       content.style.opacity = 0;
       content.innerHTML = html;
-      // Плавне fade-in
-      setTimeout(() => { content.style.opacity = 1; }, 50);
+      setTimeout(() => { content.style.opacity = 1; }, 50); // fade-in
     })
     .catch(() => {
       document.getElementById("content").innerHTML =
@@ -179,9 +183,9 @@ function loadLesson(lessonId) {
     });
 }
 
-/* ------------------------------
-   PYODIDE
--------------------------------- */
+// -------------------------------
+// PYODIDE
+// -------------------------------
 let pyodideReady = false;
 async function initPy() {
   if (!pyodideReady) {
@@ -190,9 +194,9 @@ async function initPy() {
   }
 }
 
-/* ------------------------------
-   ЗАПУСК КОДУ УЧНЯ
--------------------------------- */
+// -------------------------------
+// ЗАПУСК КОДУ УЧНЯ
+// -------------------------------
 async function runStudentCode(task) {
   await initPy();
 
@@ -217,9 +221,9 @@ sys.stdout = StringIO()
   }
 }
 
-/* ------------------------------
-   ПЕРЕВІРКА КОДУ
--------------------------------- */
+// -------------------------------
+// ПЕРЕВІРКА КОДУ
+// -------------------------------
 async function checkStudentCode(task) {
   await initPy();
 
@@ -229,7 +233,7 @@ async function checkStudentCode(task) {
 
   for (let test of tests) {
     const inputs = task.querySelectorAll(".user-input");
-    test.input.forEach((v, i) => (inputs[i].value = v));
+    test.input.forEach((v,i)=>inputs[i].value=v);
 
     let index = 0;
     pyodide.globals.set("input", () => inputs[index++]?.value || "");
@@ -245,8 +249,7 @@ sys.stdout = StringIO()
       const res = pyodide.runPython("sys.stdout.getvalue()").trim();
 
       if (res !== String(test.expected).trim()) {
-        output.textContent =
-          `❌ Ввід: ${test.input.join(", ")} | Очікується: ${test.expected} | Отримано: ${res}`;
+        output.textContent = `❌ Ввід: ${test.input.join(", ")} | Очікується: ${test.expected} | Отримано: ${res}`;
         return;
       }
     } catch (e) {
@@ -255,7 +258,7 @@ sys.stdout = StringIO()
     }
   }
 
-  // ✅ Усі тести пройдено
+  // ✅ Тести пройдено
   output.textContent = "✅ Усі тести пройдено!";
 
   const email = getCurrentStudent();
@@ -270,21 +273,25 @@ sys.stdout = StringIO()
 
   // Підсвічуємо завдання
   task.classList.add("completed");
-  task.style.transition = "background-color 0.5s ease";
 
   // Додаємо зелений чек для уроку у лівій колонці
-  const lessonLink = document.getElementById(task.dataset.lessonId);
+  const lessonId = task.dataset.lessonId;
+  const lessonLink = Array.from(document.querySelectorAll("#lessons-list a"))
+    .find(a=>a.onclick && a.onclick.toString().includes(lessonId));
   if (lessonLink) lessonLink.classList.add("completed-lesson");
 
-  // Оновлюємо прогрес-бар
   updateCourseProgress();
 }
 
-/* ------------------------------
-   ПІДКАЗКА
--------------------------------- */
+// -------------------------------
+// ПІДКАЗКА
+// -------------------------------
 function toggleHint(btn) {
   const hint = btn.closest(".task").querySelector(".hint");
   hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
 
+// -------------------------------
+// ІНІЦІАЛІЗАЦІЯ ПРИ ЗАВАНТАЖЕННІ
+// -------------------------------
+initCourse();
