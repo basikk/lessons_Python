@@ -1,151 +1,146 @@
+<section class="lesson">
+  <h1>Алгоритми розгалужень</h1>
 
-<h1>Python. Розгалуження (if / elif / else)</h1>
+  <p>
+    У програмуванні часто виникає потреба виконувати різні дії залежно
+    від умови. Для цього у Python використовується оператор
+    <strong>if</strong>.
+  </p>
 
-<h2>Теорія</h2>
-<p>Розгалуження дозволяє програмі приймати рішення. Python читає умови зверху вниз і виконує першу істинну.</p>
-<pre>
-if умова:
-    команда
-elif інша_умова:
+  <pre><code>if умова:
     команда
 else:
-    команда
-</pre>
-<p>Умови — логічні вирази: <code>&gt;</code>, <code>&lt;</code>, <code>==</code>, <code>!=</code>, <code>&gt;=</code>, <code>&lt;=</code>.  
-Результат умов записуємо у змінну <code>result</code> для автоперевірки.</p>
-<hr>
+    інша_команда
+</code></pre>
 
-<h2>Практичні завдання</h2>
+  <p>
+    Якщо умова істинна (<code>True</code>) — виконується перший блок,
+    інакше — блок <code>else</code>.
+  </p>
 
-<!-- ================= TASK 1 (1 input) ================= -->
-<div class="task easy"
-    data-lesson-id="lesson1"
-     data-tests='[{"input":["5"],"expected":"positive"},{"input":["-3"],"expected":"negative"},{"input":["0"],"expected":"zero"}]'>
-<h3>Завдання 1 <span class="level">(Початковий)</span></h3>
-<p>Визнач, чи число додатне, від’ємне або нуль.</p>
-<label>Ввід:</label>
-<input class="user-input" type="number" value="0">
+  <hr>
 
-<textarea>
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 1 -->
+  <!-- ============================= -->
+
+  <div class="task"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["5"], "expected":"додатне"},
+         {"input":["-2"], "expected":"відʼємне"},
+         {"input":["0"], "expected":"нуль"}
+       ]'>
+
+    <h2>Завдання 1. Додатне, відʼємне чи нуль</h2>
+
+    <p>
+      Введіть число та виведіть:
+      <br>• <code>додатне</code>, якщо число &gt; 0
+      <br>• <code>відʼємне</code>, якщо число &lt; 0
+      <br>• <code>нуль</code>, якщо число дорівнює 0
+    </p>
+
+    <label>
+      Ввід:
+      <input class="user-input" type="text" placeholder="число">
+    </label>
+
+    <textarea rows="6">
 x = int(input())
-# обчисли знак числа і запиши у result
-</textarea>
 
-<div class="lesson-buttons">
-<button data-action="run">▶ Запустити</button>
-<button data-action="check">✔ Перевірити</button>
-<button data-action="hint">💡 Підказка</button>
-</div>
-    
-<pre class="output"></pre>
+if x > 0:
+    print("додатне")
+elif x < 0:
+    print("відʼємне")
+else:
+    print("нуль")
+    </textarea>
 
-<div class="hint hidden">
-    Використовуй if / elif / else і запиши результат у <code>result</code>.</div>
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
 
-</div>
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
 
-<!-- ================= TASK 2 (1 input) ================= -->
-<div class="task easy"
-       data-lesson-id="lesson1"
-     data-tests='[{"input":["4"],"expected":"even"},{"input":["7"],"expected":"odd"},{"input":["0"],"expected":"even"}]'>
-<h3>Завдання 2 <span class="level">(Початковий)</span></h3>
-<p>Визнач, чи число парне чи непарне.</p>
-<label>Ввід:</label>
-<input class="user-input" type="number" value="0">
-<textarea>
-n = int(input())
-# результат в result
-</textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Використовуй n % 2 == 0 для перевірки парності.</div>
-<pre class="output"></pre>
-</div>
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
 
-<!-- ================= TASK 3 (2 inputs) ================= -->
-<div class="task medium"
-       data-lesson-id="lesson1"
-     data-tests='[{"input":["3","7"],"expected":"10"},{"input":["5","12"],"expected":"17"}]'>
-<h3>Завдання 3 <span class="level">(Середній)</span></h3>
-<p>Знайди суму двох чисел.</p>
-<label>Ввід a:</label>
-<input class="user-input" type="number" value="0">
-<label>Ввід b:</label>
-<input class="user-input" type="number" value="0">
-<textarea>
+    <div class="hint" style="display:none;">
+      <p>
+        Використай конструкцію <code>if / elif / else</code>
+        та порівняй число з нулем.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 2 -->
+  <!-- ============================= -->
+
+  <div class="task"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["10","5"], "expected":"10"},
+         {"input":["3","8"], "expected":"8"}
+       ]'>
+
+    <h2>Завдання 2. Більше з двох чисел</h2>
+
+    <p>
+      Введіть два числа та виведіть більше з них.
+    </p>
+
+    <label>
+      Число A:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Число B:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
 a = int(input())
 b = int(input())
-result = a + b
-print(result)
-</textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Введи два числа, використовуй int(input()) для кожного і додай їх у result.</div>
-<pre class="output"></pre>
-</div>
 
-<!-- ================= TASK 4 (3 inputs) ================= -->
-<div class="task medium"
-       data-lesson-id="lesson1"
-     data-tests='[{"input":["2","3","5"],"expected":"10"},{"input":["1","1","1"],"expected":"3"}]'>
-<h3>Завдання 4 <span class="level">(Середній)</span></h3>
-<p>Знайди суму трьох чисел.</p>
-<label>Ввід a:</label>
-<input class="user-input" type="number" value="0">
-<label>Ввід b:</label>
-<input class="user-input" type="number" value="0">
-<label>Ввід c:</label>
-<input class="user-input" type="number" value="0">
-<textarea>
-a = int(input())
-b = int(input())
-c = int(input())
-result = a + b + c
-print(result)
-</textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Використовуй int(input()) для кожного числа і запиши суму у result.</div>
-<pre class="output"></pre>
-</div>
+if a > b:
+    print(a)
+else:
+    print(b)
+    </textarea>
 
-<!-- ================= TASK 5 (1 input) ================= -->
-<div class="task hard"
-       data-lesson-id="lesson1"
-     data-tests='[{"input":["90"],"expected":"A"},{"input":["75"],"expected":"B"},{"input":["40"],"expected":"F"}]'>
-<h3>Завдання 5 <span class="level">(Складний)</span></h3>
-<p>За балами визнач оцінку: 90+ → A, 75–89 → B, інакше → F</p>
-<label>Ввід:</label>
-<input class="user-input" type="number" value="0">
-<textarea>
-score = int(input())
-# результат в result
-</textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Перевіряй умови від більшого до меншого, записуй у result.</div>
-<pre class="output"></pre>
-</div>
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
 
-<!-- ================= TASK 6 (1 input) ================= -->
-<div class="task hard"
-       data-lesson-id="lesson1"
-     data-tests='[{"input":["15"],"expected":"FizzBuzz"},{"input":["3"],"expected":"Fizz"},{"input":["5"],"expected":"Buzz"},{"input":["2"],"expected":"None"}]'>
-<h3>Завдання 6 <span class="level">(Складний)</span></h3>
-<p>FizzBuzz: кратність 3 → "Fizz", 5 → "Buzz", 15 → "FizzBuzz", інакше → "None".</p>
-<label>Ввід:</label>
-<input class="user-input" type="number" value="0">
-<textarea>
-n = int(input())
-# обчисли FizzBuzz і запиши у result
-</textarea>
-<button onclick="runStudentCode(this)">▶ Запустити</button>
-<button onclick="checkStudentCode(this)">✔ Перевірити</button>
-<button onclick="toggleHint(this)">💡 Підказка</button>
-<div class="hint">Спочатку перевіряй кратність 15, потім 3 та 5, результат у result.</div>
-<pre class="output"></pre>
-</div>
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
+
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      <p>
+        Порівняй два числа за допомогою оператора <code>&gt;</code>.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+</section>
