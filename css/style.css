@@ -171,7 +171,9 @@ h1, h2, h3 {
 
 .task.completed {
   background: #e6f9e6;
+  transition: background-color 0.5s ease;
 }
+
 
 /* ==============================
    ПІДКАЗКА
