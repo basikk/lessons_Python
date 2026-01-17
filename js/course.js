@@ -141,16 +141,19 @@ if (current) buildLessonsList();
    ЗАВАНТАЖЕННЯ УРОКУ
 -------------------------------- */
 
-function loadLesson(lessonId) {
-  fetch(`lessons/${lessonId}.html`)
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById("content").innerHTML = html;
-    })
-    .catch(() => {
-      document.getElementById("content").innerHTML =
-        "<p>Помилка завантаження уроку</p>";
-    });
+function loadLesson(lessonId){
+    fetch(`lessons/${lessonId}.html`)
+        .then(r=>r.text())
+        .then(html=>{
+            const contentEl = document.getElementById("content");
+            contentEl.innerHTML = html;
+            contentEl.classList.remove('fade-in');
+            void contentEl.offsetWidth; // тригер перезапуску анімації
+            contentEl.classList.add('fade-in');
+        })
+        .catch(()=>{
+            document.getElementById("content").innerHTML="<p>Помилка завантаження уроку</p>";
+        });
 }
 
 /* ------------------------------
@@ -194,10 +197,10 @@ sys.stdout = StringIO()
   }
 }
 
+
 /* ------------------------------
    ПЕРЕВІРКА РІШЕННЯ
 -------------------------------- */
-
 async function checkStudentCode(task) {
   await initPy();
 
@@ -233,8 +236,18 @@ sys.stdout = StringIO()
     }
   }
 
+  // ✅ Усі тести пройдено
   output.textContent = "✅ Усі тести пройдено!";
 
+  // ==============================
+  // Підсвітка завершеного завдання
+  // ==============================
+  task.classList.add('completed');
+  task.style.transition = "background-color 0.5s ease"; // плавна анімація
+
+  // ==============================
+  // Оновлення прогресу в лівій панелі
+  // ==============================
   const email = getCurrentStudent();
   const students = JSON.parse(localStorage.getItem(`student_${email}`));
   students[task.dataset.lessonId] = {
@@ -242,7 +255,29 @@ sys.stdout = StringIO()
     totalTasks: tests.length
   };
   localStorage.setItem(`student_${email}`, JSON.stringify(students));
+
+  // Зелена галочка поруч із темою уроку, якщо всі уроки теми завершено
+  const lessonTopic = task.closest('.lesson-topic');
+  const allLessons = lessonTopic.querySelectorAll('li');
+  let allDone = true;
+  allLessons.forEach(li => {
+    const a = li.querySelector('a');
+    const lessonId = a?.dataset.lessonId || a?.textContent;
+    if (!lessonId || !students[lessonId] || students[lessonId].completedTasks < students[lessonId].totalTasks) {
+      allDone = false;
+    }
+  });
+
+  if (allDone) {
+    lessonTopic.querySelector('h3').classList.add('completed'); // додаємо зелений клас
+  }
+
+  // Оновлення загального прогресу курсу
+  buildLessonsList();
 }
+
+
+
 
 /* ------------------------------
    ПІДКАЗКА
