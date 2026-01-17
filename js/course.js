@@ -1,6 +1,3 @@
-// ================================
-// course.js — логіка курсу Python 9 клас
-// Сумісний з GitHub Pages + Pyodide
 // Підтримує:
 // - Вхід учня без перезавантаження
 // - Список уроків із темами та розблокуванням
@@ -88,21 +85,15 @@ function updateCourseProgress() {
 //  ПОБУДОВА  СПИСОК УРОКІВ
 // -------------------------------
 
-/* ------------------------------
-   СПИСОК УРОКІВ
--------------------------------- */
-/* ------------------------------
-   СПИСОК УРОКІВ
--------------------------------- */
+
 function buildLessonsList() {
-  const current = getCurrentStudent(); // отримуємо поточного учня
+  const current = getCurrentStudent();  // отримуємо поточного учня
   if (!current) return;
 
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
   const lessonsList = document.getElementById("lessons-list");
   lessonsList.innerHTML = ""; // очищаємо контейнер перед побудовою
 
-  // Проходимо по кожній темі курсу
   courseData.forEach(topic => {
     const div = document.createElement("div");
     div.className = "lesson-topic";
@@ -110,48 +101,49 @@ function buildLessonsList() {
     // Заголовок теми (розкривний)
     const h3 = document.createElement("h3");
     h3.textContent = topic.topic;
-    // Клік по заголовку відкриває/закриває список уроків
+
+      // Клік по заголовку відкриває/закриває список уроків
     h3.onclick = () => {
       const ol = div.querySelector("ol");
-      if (ol) {
-        ol.style.display = ol.style.display === "none" ? "block" : "none";
-      }
+      ol.style.display = ol.style.display === "none" ? "block" : "none";
     };
     div.appendChild(h3);
 
-    // Створюємо один список уроків для цієї теми
+     // Створюємо один список уроків для цієї теми
     const ol = document.createElement("ol");
 
-    // Проходимо по уроках теми
+    // Додаємо нумерацію уроків у темі
     topic.lessons.forEach((lesson, idx) => {
       const li = document.createElement("li");
+      li.textContent = `${idx + 1}. `; // нумерація
       const a = document.createElement("a");
       a.textContent = lesson.title;
 
-      // Перевіряємо, чи урок розблоковано
+      // Перевірка, чи урок розблоковано
       const flatLessons = courseData.flatMap(t => t.lessons);
-      const lessonIndex = flatLessons.findIndex(l => l.id === lesson.id);
-
+      const index = flatLessons.findIndex(l => l.id === lesson.id);
       let unlocked = true;
-      if (lessonIndex > 0) {
-        const prevId = flatLessons[lessonIndex - 1].id;
-        const prevLesson = studentData[prevId];
-        unlocked = prevLesson && prevLesson.completedTasks === prevLesson.totalTasks;
+
+      if (index > 0) {
+        const prevId = flatLessons[index - 1].id;
+        const prev = studentData[prevId];
+        unlocked = prev && prev.completedTasks === prev.totalTasks;
       }
 
       if (!unlocked) {
-        li.className = "locked"; // урок заблоковано
+        li.className = "locked"; // затемнення для заблокованих уроків
       } else {
         a.href = "#";
         a.onclick = e => {
           e.preventDefault();
           loadLesson(lesson.id);
         };
-      }
 
-      // Якщо урок вже завершений, додаємо клас для зеленої галочки
-      if (studentData[lesson.id] && studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
-        a.classList.add("completed-lesson");
+        // Якщо урок завершено, додаємо зелений клас
+        if (studentData[lesson.id] &&
+            studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
+          a.classList.add("completed-lesson");
+        }
       }
 
       li.appendChild(a);
@@ -159,13 +151,10 @@ function buildLessonsList() {
     });
 
     div.appendChild(ol); // додаємо список уроків теми до div
-    lessonsList.appendChild(div); // додаємо тему до контейнера
+    lessonsList.appendChild(div);
   });
 
-  updateCourseProgress(); // оновлюємо прогрес
 }
-
-
 
 
 // -------------------------------
