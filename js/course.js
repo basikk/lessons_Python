@@ -27,8 +27,6 @@ const courseData = [
 
 
 
-
-
 /* ------------------------------
    ЛОГІН УЧНЯ
 -------------------------------- */
@@ -240,40 +238,38 @@ sys.stdout = StringIO()
   output.textContent = "✅ Усі тести пройдено!";
 
   // ==============================
-  // Підсвітка завершеного завдання
-  // ==============================
-  task.classList.add('completed');
-  task.style.transition = "background-color 0.5s ease"; // плавна анімація
-
-  // ==============================
-  // Оновлення прогресу в лівій панелі
+  // Оновлюємо localStorage для поточного учня
   // ==============================
   const email = getCurrentStudent();
-  const students = JSON.parse(localStorage.getItem(`student_${email}`));
+  if (!email) return; // без логіну нічого не робимо
+  const students = JSON.parse(localStorage.getItem(`student_${email}`)) || {};
+
+  // Кількість завдань для уроку = кількість тестів
   students[task.dataset.lessonId] = {
     completedTasks: tests.length,
     totalTasks: tests.length
   };
   localStorage.setItem(`student_${email}`, JSON.stringify(students));
 
-  // Зелена галочка поруч із темою уроку, якщо всі уроки теми завершено
-  const lessonTopic = task.closest('.lesson-topic');
-  const allLessons = lessonTopic.querySelectorAll('li');
-  let allDone = true;
-  allLessons.forEach(li => {
-    const a = li.querySelector('a');
-    const lessonId = a?.dataset.lessonId || a?.textContent;
-    if (!lessonId || !students[lessonId] || students[lessonId].completedTasks < students[lessonId].totalTasks) {
-      allDone = false;
-    }
-  });
+  // ==============================
+  // Додаємо клас completed до завдання
+  // ==============================
+  task.classList.add("completed");
+  task.style.transition = "background-color 0.5s ease";
 
-  if (allDone) {
-    lessonTopic.querySelector('h3').classList.add('completed'); // додаємо зелений клас
+  // ==============================
+  // Додаємо зелений клас до уроку у лівій колонці, якщо всі завдання завершено
+  // ==============================
+  const lessonId = task.dataset.lessonId;
+  const lessonLink = document.querySelector(`#lessons-list a[href="#"][onclick*="${lessonId}"]`);
+  if (lessonLink) {
+    lessonLink.classList.add("completed-lesson"); // додаємо клас для зеленої галочки
   }
 
-  // Оновлення загального прогресу курсу
-  buildLessonsList();
+  // ==============================
+  // Оновлюємо загальний прогрес
+  // ==============================
+  updateCourseProgress();
 }
 
 
