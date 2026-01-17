@@ -35,6 +35,7 @@ const courseData = [
 // ЛОГІН УЧНЯ
 // -------------------------------
 function loginStudent() {
+   const emailInput = document.getElementById("email");
     const email = document.getElementById("email").value.trim().toLowerCase();
 
   if (!email) {
@@ -42,6 +43,7 @@ function loginStudent() {
     return;
   }
 
+   // Зберігаємо поточного учня
   localStorage.setItem("currentStudent", email);
 
   // Якщо нового учня, створюємо об'єкт для прогресу
@@ -49,7 +51,7 @@ function loginStudent() {
     localStorage.setItem(`student_${email}`, JSON.stringify({}));
   }
 
-  // після логіну оновлюємо інтерфейс без reload
+   // Перезавантажуємо сторінку, щоб ініціалізувати курс для нового учня
   location.reload();
 }
 
@@ -57,28 +59,7 @@ function getCurrentStudent() {
   return localStorage.getItem("currentStudent");
 }
 
-const current = getCurrentStudent();
-if (!current) {
-  document.getElementById("content").innerHTML =
-    "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
-}
 
-// -------------------------------
-// ІНІЦІАЛІЗАЦІЯ КУРСУ
-// -------------------------------
-function initCourse() {
-  const current = getCurrentStudent();
-  const contentEl = document.getElementById("content");
-
-  if (!current) {
-    contentEl.innerHTML = "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
-    return;
-  }
-
-  // будуємо список уроків і прогрес
-  buildLessonsList();
-  updateCourseProgress();
-}
 
 // -------------------------------
 // ПРОГРЕС-БАР
@@ -90,6 +71,7 @@ function updateCourseProgress() {
   const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
   let totalTasks = 0, completedTasks = 0;
 
+   // Підраховуємо загальну кількість завдань і завершені завдання
   courseData.forEach(topic => topic.lessons.forEach(l => {
     const p = studentData[l.id];
     totalTasks += p ? p.totalTasks : 1;
@@ -103,7 +85,7 @@ function updateCourseProgress() {
 }
 
 // -------------------------------
-// СПИСОК УРОКІВ
+//  ПОБУДОВА  СПИСОК УРОКІВ
 // -------------------------------
 function buildLessonsList() {
   const current = getCurrentStudent();
@@ -120,38 +102,44 @@ function buildLessonsList() {
     // Заголовок теми (розкривний)
     const h3 = document.createElement("h3");
     h3.textContent = topic.topic;
+    h3.onclick = () => {
+      const ol = div.querySelector("ol");
+      ol.style.display = ol.style.display === "none" ? "block" : "none";
+    };
     div.appendChild(h3);
 
-    // Список уроків у темі
     const ol = document.createElement("ol");
-    ol.classList.add("collapsed"); // сховане за замовчуванням  спочатку
 
-    topic.lessons.forEach(lesson => {
+    // Додаємо нумерацію уроків у темі
+    topic.lessons.forEach((lesson, idx) => {
       const li = document.createElement("li");
+      li.textContent = `${idx + 1}. `; // нумерація
       const a = document.createElement("a");
       a.textContent = lesson.title;
 
-       // Розблокування уроку
-      const flat = courseData.flatMap(t => t.lessons);
-      const index = flat.findIndex(l => l.id === lesson.id);
-
+      // Перевірка, чи урок розблоковано
+      const flatLessons = courseData.flatMap(t => t.lessons);
+      const index = flatLessons.findIndex(l => l.id === lesson.id);
       let unlocked = true;
+
       if (index > 0) {
-        const prevId = flat[index - 1].id;
+        const prevId = flatLessons[index - 1].id;
         const prev = studentData[prevId];
         unlocked = prev && prev.completedTasks === prev.totalTasks;
       }
 
-      if (!unlocked)  li.className = "locked";
-      else {
+      if (!unlocked) {
+        li.className = "locked"; // затемнення для заблокованих уроків
+      } else {
         a.href = "#";
         a.onclick = e => {
           e.preventDefault();
           loadLesson(lesson.id);
         };
 
-        // Якщо урок завершений, додаємо зелений клас
-        if (studentData[lesson.id] && studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
+        // Якщо урок завершено, додаємо зелений клас
+        if (studentData[lesson.id] &&
+            studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
           a.classList.add("completed-lesson");
         }
       }
@@ -162,15 +150,8 @@ function buildLessonsList() {
 
     div.appendChild(ol);
     lessonsList.appendChild(div);
-
-    // Розкриття списку 1 кліком
-    h3.onclick = () => {  ol.classList.toggle("collapsed"); // один клік розкриває список
   });
-
-  updateCourseProgress();
 }
-                     
-if (current) buildLessonsList();
 
 
 
@@ -178,14 +159,16 @@ if (current) buildLessonsList();
 // ЗАВАНТАЖЕННЯ УРОКУ
 // -------------------------------
 function loadLesson(lessonId) {
-  fetch(`lessons/${lessonId}.html`)
+ const content = document.getElementById("content");
+  content.style.opacity = 0; // для fade-in ефекту
+  
+    fetch(`lessons/${lessonId}.html`)
     .then(r => r.text())
     .then(html => {
-      const content = document.getElementById("content");
-      content.classList.remove("show");       // прибираємо попередній клас
-      content.classList.add("fade-in");       // додаємо fade-in
       content.innerHTML = html;
-      setTimeout(() => content.classList.add("show"), 50); // плавне з’явлення
+      setTimeout(() => {
+        content.style.opacity = 1;
+      }, 50); // плавне відображення
     })
     .catch(() => {
       document.getElementById("content").innerHTML =
@@ -304,3 +287,24 @@ function toggleHint(btn) {
   hint.style.display = hint.style.display === "none" ? "block" : "none";
 }
 
+  // -------------------------------
+// ІНІЦІАЛІЗАЦІЯ КУРСУ
+// -------------------------------
+function initCourse() {
+  const current = getCurrentStudent();
+  const contentEl = document.getElementById("content");
+
+  if (!current) {
+    contentEl.innerHTML = "<h2>Будь ласка, увійдіть для початку курсу.</h2>";
+    return;
+  }
+
+  // будуємо список уроків і прогрес
+  buildLessonsList();
+  updateCourseProgress();
+}
+
+  // Виклик після завантаження DOM
+document.addEventListener("DOMContentLoaded", () => {
+  initCourse();
+});
