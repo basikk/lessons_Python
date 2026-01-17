@@ -1,214 +1,157 @@
-/* =============================
-   ЗАГАЛЬНІ СТИЛІ
-============================= */
-
+/* ============================= */
+/* ОСНОВНІ СТИЛІ КОНТЕЙНЕРУ */
+/* ============================= */
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  display: flex;
-  min-height: 100vh;
-  background-color: #f4f6f8;
+  padding: 0;
+  background: #f7f8fa;
   color: #333;
 }
 
-#sidebar {
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================= */
+/* ЛІВА ПАНЕЛЬ / SIDEBAR */
+/* ============================= */
+.sidebar {
   width: 280px;
-  background-color: #f9f9f9;
+  background: #fff;
   border-right: 1px solid #ddd;
   padding: 20px;
   box-sizing: border-box;
 }
 
-#content {
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.login {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.login input {
   flex: 1;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  padding: 5px;
 }
 
-/* =============================
-   ЛОГІН УЧНЯ
-============================= */
-
-#sidebar input[type="email"] {
-  width: calc(100% - 16px);
-  padding: 6px 8px;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-#sidebar button {
-  padding: 6px 12px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-  border: none;
-  background-color: #3498db;
-  color: #fff;
+.login button {
+  padding: 5px 10px;
   cursor: pointer;
-  font-size: 14px;
 }
 
-#sidebar button:hover {
-  background-color: #2980b9;
-}
-
-/* =============================
-   ПРОГРЕС-БАР
-============================= */
-
-.progress-bar {
-  background-color: #e0e0e0;
-  border-radius: 6px;
+/* Прогрес-бар */
+.progress-wrapper {
+  width: 100%;
+  background: #eee;
+  height: 20px;
+  border-radius: 10px;
   overflow: hidden;
   margin-bottom: 20px;
-  height: 20px;
 }
 
-.progress-fill {
-  background-color: #2ecc71;
+.progress-bar {
   height: 100%;
-  width: 0%;
+  width: 0;
+  background: #2ecc71;
   text-align: center;
   color: #fff;
   line-height: 20px;
-  font-size: 12px;
-  transition: width 0.4s ease;
+  border-radius: 10px;
+  transition: width 0.5s ease;
 }
 
-/* =============================
-   СПИСОК УРОКІВ
-============================= */
-
+/* Список уроків */
 .lesson-topic h3 {
+  margin: 10px 0 5px;
   cursor: pointer;
-  padding: 8px 10px;
-  margin: 0;
-  background-color: #ecf0f1;
-  border-radius: 4px;
-  transition: background 0.2s ease;
-  position: relative;
-}
-
-.lesson-topic h3:hover {
-  background-color: #d0d7de;
-}
-
-/* Галочка завершеного уроку */
-.lesson-topic h3.completed::after {
-  content: "✔";
-  color: #2ecc71;
-  position: absolute;
-  right: 10px;
-  font-weight: bold;
+  color: #2c3e50;
 }
 
 .lesson-topic ol {
-  list-style-type: decimal;
-  margin: 5px 0 15px 20px;
-  padding-left: 0;
-  display: none;
+  list-style: none;
+  padding-left: 15px;
+  margin: 0;
 }
 
 .lesson-topic li {
-  margin: 5px 0;
-}
-
-.lesson-topic li a {
-  color: #34495e;
-  text-decoration: none;
-  display: block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-
-.lesson-topic li a:hover {
-  background-color: #d6eaf8;
+  margin-bottom: 5px;
 }
 
 .lesson-topic li.locked a {
   color: #aaa;
   pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
 }
 
-/* =============================
-   СТИЛІ ЗАВДАНЬ
-============================= */
+.lesson-topic a {
+  color: #2980b9;
+  text-decoration: none;
+}
 
+.lesson-topic a.completed-lesson::after {
+  content: " ✅";
+}
+
+/* ============================= */
+/* ПРАВА КОЛОНКА / CONTENT */
+/* ============================= */
+#content {
+  flex: 1;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* Завдання */
 .task {
-  width: 80%;
-  margin: 20px 0;
-  padding: 15px 20px;
-  border-radius: 6px;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  border-left: 6px solid #3498db; /* default color, можна змінювати через easy/medium/hard */
-  transition: transform 0.3s ease, background 0.3s ease;
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  width: 60%; /* не на всю ширину */
+  transition: background-color 0.5s ease, transform 0.3s ease;
 }
-
-.task.easy { border-left-color: #2ecc71; }
-.task.medium { border-left-color: #f39c12; }
-.task.hard { border-left-color: #e74c3c; }
 
 .task.completed {
-  background-color: #e8f5e9; /* легке зелене підсвічування */
-  transform: translateX(3px);
+  background-color: #e2f7e2;
+  transform: scale(1.02);
 }
 
-/* =============================
-   КНОПКИ
-============================= */
+.task h2 {
+  margin-top: 0;
+}
+
+.task textarea {
+  width: 100%;
+  margin-top: 5px;
+}
 
 .task .buttons {
   margin-top: 10px;
+  display: flex;
+  gap: 5px;
 }
 
-.task button {
-  padding: 4px 10px;
-  margin-right: 6px;
-  border-radius: 4px;
-  border: none;
-  background-color: #3498db;
-  color: #fff;
-  cursor: pointer;
-  font-size: 13px;
+.task .output {
+  background: #f4f4f4;
+  padding: 5px;
+  margin-top: 5px;
+  white-space: pre-wrap;
 }
-
-.task button:hover {
-  background-color: #2980b9;
-}
-
-/* =============================
-   ПІДКАЗКИ
-============================= */
 
 .hint {
-  padding: 10px;
-  margin-top: 8px;
-  background-color: #fef9e7;
-  border-left: 4px solid #f1c40f;
-  border-radius: 4px;
+  background: #f9f9f9;
+  border-left: 3px solid #f39c12;
+  padding: 5px;
+  margin-top: 5px;
 }
 
-/* =============================
-   ВИВІД КОДУ
-============================= */
-
-.output {
-  margin-top: 8px;
-  padding: 8px;
-  background-color: #f4f6f8;
-  border-radius: 4px;
-  min-height: 20px;
-  white-space: pre-wrap;
-  font-family: monospace;
-}
 
 /* =============================
    ПЛАВНЕ ЗАВАНТАЖЕННЯ УРОКУ
