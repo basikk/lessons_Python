@@ -92,82 +92,56 @@ function updateCourseProgress() {
    СПИСОК УРОКІВ
 -------------------------------- */
 function buildLessonsList() {
-  if (!current) return;
+  const email = localStorage.getItem('currentUserEmail');
+  const studentData = JSON.parse(localStorage.getItem(`student_${email}`) || '{}');
+  const completed = studentData.completed || [];
+  const listEl = document.getElementById('lessons-list');
+  listEl.innerHTML = ''; // очищаємо попередній список
 
-  // Беремо дані учня
-  const studentData = JSON.parse(localStorage.getItem(`student_${current}`)) || {};
-
-  const lessonsList = document.getElementById("lessons-list");
-  lessonsList.innerHTML = ""; // очищаємо весь список перед побудовою
-
-  // Перебираємо всі теми курсу
-  courseData.forEach(topic => {
-    const topicDiv = document.createElement("div");
-    topicDiv.className = "lesson-topic";
-
-    // Заголовок теми (клік — показати/сховати уроки)
-    const h3 = document.createElement("h3");
-    h3.textContent = topic.topic;
-    h3.style.cursor = "pointer";
-    h3.onclick = () => {
-      const ol = topicDiv.querySelector("ol");
-      if (ol) ol.style.display = ol.style.display === "none" ? "block" : "none";
-    };
-    topicDiv.appendChild(h3);
-
-    // Створюємо список уроків
-    const ol = document.createElement("ol");
-    ol.style.paddingLeft = "20px"; // для нумерації
-    ol.style.marginTop = "5px";
-    ol.style.marginBottom = "10px";
-
-    topic.lessons.forEach((lesson, idx) => {
-      const li = document.createElement("li");
-
-      const a = document.createElement("a");
-      a.textContent = `${idx + 1}. ${lesson.title}`; // нумерація + назва уроку
-
-      // Перевірка чи урок розблоковано
-      const flatLessons = courseData.flatMap(t => t.lessons);
-      const lessonIndex = flatLessons.findIndex(l => l.id === lesson.id);
-
-      let unlocked = true;
-      if (lessonIndex > 0) {
-        const prevId = flatLessons[lessonIndex - 1].id;
-        const prev = studentData[prevId];
-        unlocked = prev && prev.completedTasks === prev.totalTasks;
+  courseData.forEach((topic, i) => {
+    // Створюємо елемент теми
+    const topicItem = document.createElement('li');
+    topicItem.classList.add('topic');
+    topicItem.textContent = (i+1) + '. ' + topic.title;
+    
+    // Створюємо контейнер для уроків цієї теми
+    const lessonsUl = document.createElement('ul');
+    lessonsUl.classList.add('lessons');
+    lessonsUl.style.display = 'none';
+    
+    topic.lessons.forEach((lesson, j) => {
+      const lessonItem = document.createElement('li');
+      lessonItem.classList.add('lesson');
+      
+      // Додаємо клас completed-lesson, якщо урок пройдений
+      const lessonId = topic.id + '-' + lesson.id; 
+      if (completed.includes(lessonId)) {
+        lessonItem.classList.add('completed-lesson');
+      }
+      // Блокуємо урок, якщо попередні не пройдені
+      const lastDoneIndex = Math.max(
+        ...completed
+          .filter(id => id.startsWith(topic.id))
+          .map(id => parseInt(id.split('-')[1]))
+      );
+      if (j > lastDoneIndex) {
+        lessonItem.classList.add('locked');
       }
 
-      if (!unlocked) {
-        li.className = "locked";
-        a.style.cursor = "not-allowed";
-        a.style.color = "#999";
-      } else {
-        a.href = "#";
-        a.onclick = e => {
-          e.preventDefault();
-          loadLesson(lesson.id);
-        };
-
-        // Якщо урок завершено, додаємо галочку
-        if (studentData[lesson.id] &&
-            studentData[lesson.id].completedTasks === studentData[lesson.id].totalTasks) {
-          a.classList.add("completed-lesson");
-        }
+      // Формуємо вміст: номер і назва уроку (посилання доступне, якщо не locked)
+      const lessonLabel = document.createElement('a');
+      lessonLabel.textContent = (j+1) + '. ' + lesson.title;
+      if (!lessonItem.classList.contains('locked')) {
+        lessonLabel.href = lesson.url;
       }
-
-      li.appendChild(a);
-      ol.appendChild(li);
+      lessonItem.appendChild(lessonLabel);
+      lessonsUl.appendChild(lessonItem);
     });
 
-    topicDiv.appendChild(ol);
-    lessonsList.appendChild(topicDiv);
+    listEl.appendChild(topicItem);
+    listEl.appendChild(lessonsUl);
   });
-
-  // Оновлюємо прогрес-бар після побудови списку
-  updateCourseProgress();
 }
-
 
 
 
