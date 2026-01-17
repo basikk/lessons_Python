@@ -173,9 +173,10 @@ function loadLesson(lessonId) {
     .then(r => r.text())
     .then(html => {
       const content = document.getElementById("content");
-      content.style.opacity = 0;
+      content.classList.remove("show");       // прибираємо попередній клас
+      content.classList.add("fade-in");       // додаємо fade-in
       content.innerHTML = html;
-      setTimeout(() => { content.style.opacity = 1; }, 50); // fade-in
+      setTimeout(() => content.classList.add("show"), 50); // плавне з’явлення
     })
     .catch(() => {
       document.getElementById("content").innerHTML =
@@ -224,6 +225,9 @@ sys.stdout = StringIO()
 // -------------------------------
 // ПЕРЕВІРКА КОДУ
 // -------------------------------
+/* ------------------------------
+   ПЕРЕВІРКА КОДУ
+-------------------------------- */
 async function checkStudentCode(task) {
   await initPy();
 
@@ -233,7 +237,7 @@ async function checkStudentCode(task) {
 
   for (let test of tests) {
     const inputs = task.querySelectorAll(".user-input");
-    test.input.forEach((v,i)=>inputs[i].value=v);
+    test.input.forEach((v, i) => (inputs[i].value = v));
 
     let index = 0;
     pyodide.globals.set("input", () => inputs[index++]?.value || "");
@@ -249,7 +253,8 @@ sys.stdout = StringIO()
       const res = pyodide.runPython("sys.stdout.getvalue()").trim();
 
       if (res !== String(test.expected).trim()) {
-        output.textContent = `❌ Ввід: ${test.input.join(", ")} | Очікується: ${test.expected} | Отримано: ${res}`;
+        output.textContent =
+          `❌ Ввід: ${test.input.join(", ")} | Очікується: ${test.expected} | Отримано: ${res}`;
         return;
       }
     } catch (e) {
@@ -271,17 +276,19 @@ sys.stdout = StringIO()
   };
   localStorage.setItem(`student_${email}`, JSON.stringify(students));
 
-  // Підсвічуємо завдання
+  // Підсвічуємо завдання плавно
   task.classList.add("completed");
+  task.style.transition = "background-color 0.5s ease";
 
   // Додаємо зелений чек для уроку у лівій колонці
   const lessonId = task.dataset.lessonId;
-  const lessonLink = Array.from(document.querySelectorAll("#lessons-list a"))
-    .find(a=>a.onclick && a.onclick.toString().includes(lessonId));
+  const lessonLink = document.querySelector(`#lessons-list a[href="#"][onclick*="${lessonId}"]`);
   if (lessonLink) lessonLink.classList.add("completed-lesson");
 
+  // Оновлюємо прогрес-бар
   updateCourseProgress();
 }
+
 
 // -------------------------------
 // ПІДКАЗКА
