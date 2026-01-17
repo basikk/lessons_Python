@@ -1,15 +1,172 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-<meta charset="UTF-8">
-<title>Лінійні алгоритми</title>
-<link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-<h1>Лінійні алгоритми</h1>
-<div class="task" data-lesson-id="lesson2" data-tests='[{"input":["3"],"expected":"9"},{"input":["5"],"expected":"25"}]'>
-<h4>Завдання 1: Квадрат числа</h4>
+<section class="lesson">
+  <h1>Лінійні алгоритми</h1>
 
-</div>
-</body>
-</html>
+  <p>
+    Лінійний алгоритм – це послідовність команд, які виконуються одна за одною без умовних переходів.
+    У Python команди виконуються зверху вниз.
+  </p>
+
+  <p>
+    Приклад лінійного алгоритму:
+  </p>
+
+  <pre><code>
+x = int(input())
+y = int(input())
+z = x + y
+print(z)
+  </code></pre>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 1: ЛЕГКЕ -->
+  <!-- ============================= -->
+
+  <div class="task easy"
+       data-lesson-id="lesson2"
+       data-tests='[
+         {"input":["5","3"], "expected":"8"}
+       ]'>
+
+    <h2>Завдання 1 (Легке)</h2>
+
+    <p>
+      Введіть два числа, збережіть у змінні <code>a</code> та <code>b</code> і виведіть їхню суму.
+    </p>
+
+    <label>
+      Перше число:
+      <input class="user-input" type="text">
+    </label>
+    <label>
+      Друге число:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+a = int(input())
+b = int(input())
+print(a + b)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використай оператор <code>+</code> для обчислення суми.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 2: СЕРЕДНЄ -->
+  <!-- ============================= -->
+
+  <div class="task medium"
+       data-lesson-id="lesson2"
+       data-tests='[
+         {"input":["3","4","5"], "expected":"12"}
+       ]'>
+
+    <h2>Завдання 2 (Середнє)</h2>
+
+    <p>
+      Введіть три числа і виведіть їхню суму.
+    </p>
+
+    <label>
+      Перше число:
+      <input class="user-input" type="text">
+    </label>
+    <label>
+      Друге число:
+      <input class="user-input" type="text">
+    </label>
+    <label>
+      Третє число:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+x = int(input())
+y = int(input())
+z = int(input())
+print(x + y + z)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використай три змінні та оператор <code>+</code> для сумування.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 3: СКЛАДНЕ -->
+  <!-- ============================= -->
+
+  <div class="task hard"
+       data-lesson-id="lesson2"
+       data-tests='[
+         {"input":["2","3","4"], "expected":"6 8"}
+       ]'>
+
+    <h2>Завдання 3 (Складне)</h2>
+
+    <p>
+      Введіть три числа: <code>a</code>, <code>b</code>, <code>c</code>.
+      Спершу виведіть суму перших двох чисел, а потім суму всіх трьох чисел через пробіл.
+    </p>
+
+    <label>
+      Число A:
+      <input class="user-input" type="text">
+    </label>
+    <label>
+      Число B:
+      <input class="user-input" type="text">
+    </label>
+    <label>
+      Число C:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="8">
+a = int(input())
+b = int(input())
+c = int(input())
+sum_ab = a + b
+sum_abc = a + b + c
+print(sum_ab, sum_abc)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використай проміжні змінні для обчислення сум та <code>print()</code> для виводу обох значень.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+</section>
+
