@@ -56,6 +56,21 @@ function getCurrentStudent() {
   return localStorage.getItem("currentStudent");
 }
 
+function getLastLessonKey(email) {
+  return `lastLesson_${email}`;
+}
+
+function saveLastLesson(lessonId) {
+  const email = getCurrentStudent();
+  if (!email) return;
+  localStorage.setItem(getLastLessonKey(email), lessonId);
+}
+
+function getLastLesson(email) {
+  if (!email) return null;
+  return localStorage.getItem(getLastLessonKey(email));
+}
+
 
 
 // -------------------------------
@@ -172,6 +187,7 @@ function loadLesson(lessonId) {
       setTimeout(() => {
         content.style.opacity = 1;
       }, 50); // плавне відображення
+      saveLastLesson(lessonId);
     })
     .catch(() => {
       document.getElementById("content").innerHTML =
@@ -305,6 +321,11 @@ function initCourse() {
   // будуємо список уроків і прогрес
   buildLessonsList();
   updateCourseProgress();
+
+  const lastLesson = getLastLesson(current);
+  if (lastLesson) {
+    loadLesson(lastLesson);
+  }
 }
 
   // Виклик після завантаження DOM
