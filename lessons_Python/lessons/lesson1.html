@@ -1,0 +1,186 @@
+<h1>Змінні та типи даних</h1>
+
+<hr>
+
+<section class="lesson">
+<!-- ============================= -->
+<!-- ПРОГРЕС ПОТОЧНОГО УРОКУ -->
+<!-- ============================= -->
+<div class="lesson-progress" data-lesson-id="lesson1">
+  <div class="lesson-progress-title">
+    Прогрес уроку: <span class="lesson-progress-percent">0%</span>
+  </div>
+
+  <div class="lesson-progress-bar">
+    <div class="lesson-progress-fill"></div>
+  </div>
+</div>
+
+
+
+
+
+  <p>
+    Змінна — це ім'я, яке зберігає значення певного типу.
+    У Python найпопулярніші типи даних:
+  </p>
+
+  <ul>
+    <li><strong>int</strong> — цілі числа (наприклад, 5, -3)</li>
+    <li><strong>float</strong> — дробові числа (наприклад, 3.14)</li>
+    <li><strong>str</strong> — рядки (текст, наприклад "Привіт")</li>
+    <li><strong>bool</strong> — логічні значення (True або False)</li>
+  </ul>
+
+  <p>
+    Присвоєння значення змінній здійснюється так:
+  </p>
+  <pre><code>ім_змінної = значення</code></pre>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 1: ЛЕГКЕ -->
+  <!-- ============================= -->
+
+  <div class="task easy" 
+       data-lesson-id="lesson1"
+       data-tests='[
+         {"input":["7"], "expected":"7"}
+       ]'>
+
+    <h2>Завдання 1 (Легке)</h2>
+
+    <p>
+      Введіть число та збережіть його у змінну <code>x</code>, потім виведіть його на екран.
+    </p>
+
+    <label>
+      Введіть число:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+x = int(input())
+print(x)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використайте <code>input()</code> для вводу та <code>print()</code> для виводу.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 2: СЕРЕДНЄ -->
+  <!-- ============================= -->
+
+  <div class="task medium" 
+       data-lesson-id="lesson1"
+       data-tests='[
+         {"input":["3","4"], "expected":"7"}
+       ]'>
+
+    <h2>Завдання 2 (Середнє)</h2>
+
+    <p>
+      Введіть два числа, збережіть їх у змінні <code>a</code> та <code>b</code>, і виведіть їхню суму.
+    </p>
+
+    <label>
+      Перше число:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Друге число:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+a = int(input())
+b = int(input())
+print(a + b)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використайте <code>int()</code> для перетворення введених значень у числа, а потім <code>print()</code> для виводу суми.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 3: СКЛАДНЕ -->
+  <!-- ============================= -->
+
+  <div class="task hard" 
+       data-lesson-id="lesson1"
+       data-tests='[
+         {"input":["10","5"], "expected":"10 is greater than 5"},
+         {"input":["3","8"], "expected":"8 is greater than 3"}
+       ]'>
+
+    <h2>Завдання 3 (Складне)</h2>
+
+    <p>
+      Введіть два числа та виведіть, яке з них більше у форматі: "<число1> is greater than <число2>"
+    </p>
+
+    <label>
+      Перше число:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Друге число:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="8">
+a = int(input())
+b = int(input())
+
+if a > b:
+    print(f"{a} is greater than {b}")
+else:
+    print(f"{b} is greater than {a}")
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">▶ Запустити</button>
+      <button onclick="checkStudentCode(this.closest('.task'))">✔ Перевірити</button>
+      <button onclick="toggleHint(this)">💡 Підказка</button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      Використайте умовний оператор <code>if / else</code> для порівняння двох чисел.
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+
+<button id="add-extra-task" onclick="addExtraTask()"> ➕ Додати завдання</button>
+<div id="extra-tasks-container"></div>
+
+
+</section>
+

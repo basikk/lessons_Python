@@ -1,0 +1,223 @@
+<section class="lesson">
+  <h1>Алгоритми розгалужень</h1>
+
+  <hr>
+
+<section class="lesson">
+<!-- ============================= -->
+<!-- ПРОГРЕС ПОТОЧНОГО УРОКУ -->
+<!-- ============================= -->
+<div class="lesson-progress" data-lesson-id="lesson3">
+  <div class="lesson-progress-title">
+    Прогрес уроку: <span class="lesson-progress-percent">0%</span>
+  </div>
+
+  <div class="lesson-progress-bar">
+    <div class="lesson-progress-fill"></div>
+  </div>
+</div>
+
+  <p>
+    У програмуванні часто виникає потреба виконувати різні дії залежно
+    від умови. Для цього у Python використовується оператор
+    <strong>if</strong>.
+  </p>
+
+  <pre><code>if умова:
+    команда
+else:
+    інша_команда
+</code></pre>
+
+  <p>
+    Якщо умова істинна (<code>True</code>) — виконується перший блок,
+    інакше — блок <code>else</code>.
+  </p>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 1 -->
+  <!-- ============================= -->
+
+  <div class="task easy"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["5"], "expected":"додатне"},
+         {"input":["-2"], "expected":"відʼємне"},
+         {"input":["0"], "expected":"нуль"}
+       ]'>
+
+    <h2>Завдання 1. Додатне, відʼємне чи нуль</h2>
+
+    <p>
+      Введіть число та виведіть:
+      <br>• <code>додатне</code>, якщо число &gt; 0
+      <br>• <code>відʼємне</code>, якщо число &lt; 0
+      <br>• <code>нуль</code>, якщо число дорівнює 0
+    </p>
+
+    <label>
+      Ввід:
+      <input class="user-input" type="text" placeholder="число">
+    </label>
+
+    <textarea rows="6">
+x = int(input())
+
+if x > 0:
+    print("додатне")
+elif x < 0:
+    print("відʼємне")
+else:
+    print("нуль")
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
+
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
+
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      <p>
+        Використай конструкцію <code>if / elif / else</code>
+        та порівняй число з нулем.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 2 -->
+  <!-- ============================= -->
+
+  <div class="task hard"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["10","5"], "expected":"10"},
+         {"input":["3","8"], "expected":"8"}
+       ]'>
+
+    <h2>Завдання 2. Більше з двох чисел</h2>
+
+    <p>
+      Введіть два числа та виведіть більше з них.
+    </p>
+
+    <label>
+      Число A:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Число B:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+a = int(input())
+b = int(input())
+
+if a > b:
+    print(a)
+else:
+    print(b)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
+
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
+
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      <p>
+        Порівняй два числа за допомогою оператора <code>&gt;</code>.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  <!-- ============================= -->
+  <!-- ЗАВДАННЯ 3 -->
+  <!-- ============================= -->
+
+  <div class="task medium"
+       data-lesson-id="lesson3"
+       data-tests='[
+         {"input":["10","5"], "expected":"10"},
+         {"input":["3","8"], "expected":"8"}
+       ]'>
+
+    <h2>Завдання 3. Більше ячсячсячсфіз двох чисел</h2>
+
+    <p>
+      Введіть два числа та виведіть більше з них.
+    </p>
+
+    <label>
+      Число A:
+      <input class="user-input" type="text">
+    </label>
+
+    <label>
+      Число B:
+      <input class="user-input" type="text">
+    </label>
+
+    <textarea rows="6">
+a = int(input())
+b = int(input())
+
+if a > b:
+    print(a)
+else:
+    print(b)
+    </textarea>
+
+    <div class="buttons">
+      <button onclick="runStudentCode(this.closest('.task'))">
+        ▶ Запустити
+      </button>
+
+      <button onclick="checkStudentCode(this.closest('.task'))">
+        ✔ Перевірити
+      </button>
+
+      <button onclick="toggleHint(this)">
+        💡 Підказка
+      </button>
+    </div>
+
+    <div class="hint" style="display:none;">
+      <p>
+        Порівняй два числа за допомогою оператора <code>&gt;</code>.
+      </p>
+    </div>
+
+    <pre class="output"></pre>
+  </div>
+
+  
+</section>

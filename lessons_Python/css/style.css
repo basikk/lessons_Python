@@ -1,0 +1,223 @@
+/* ==============================
+   ЗАГАЛЬНІ СТИЛІ
+================================= */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f7f9fc;
+  color: #333;
+}
+
+h1, h2, h3 {
+  margin: 0.5em 0;
+}
+
+/* =============   КОНТЕЙНЕР ДВОКОЛОННОЇ ВЕРСТКИ========================== */
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =============   ЛІВА КОЛОНКА ================================= */
+.sidebar {
+  width: 280px;
+  background: #c0c0c0;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar h2 {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
+.login input {
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.login button {
+  width: 100%;
+  padding: 6px 10px;
+  background: #2ecc71;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login button:hover {
+  background: #27ae60;
+}
+
+/* ==========    ПРОГРЕС-БАР ================================= */
+.progress-wrapper {
+  width: 100%;
+  background: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 20px;
+}
+
+.progress-bar {
+  width: 0%;
+  background: #2ecc71;
+  height: 100%;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  font-size: 0.85em;
+  transition: width 0.5s ease;
+}
+
+/* ===========    СПИСОК УРОКІВ================================= */
+.lesson-topic h3 {
+  cursor: pointer;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.lesson-topic ol {
+ list-style-type: decimal;
+  margin: 0 0 15px 20px;
+  padding-left: 0;
+}
+
+.lesson-topic ol.collapsed {
+  display: none;
+}
+
+.lesson-topic li {
+  margin-bottom: 5px;
+}
+
+.lesson-topic li.locked a {
+  color: #999;
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.lesson-topic li a {
+  text-decoration: none;
+  color: #3498db;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.lesson-topic li a:hover {
+  color: #2980b9;
+}
+
+/* Завершений урок */
+
+.completed-lesson {
+  color: #27ae60;
+  font-weight: bold;
+  position: relative;
+}
+
+.completed-lesson::after {
+ content: "✔"; /* галочка */
+ color: green;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+/* ============   ПРАВА КОЛОНКА ================================= */
+#content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  transition: opacity 0.5s ease;
+}
+
+/* ===========    ЗАВДАННЯ ================================= */
+.task {
+  background: #ffffff;
+  border-left: 6px solid #3498db;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  max-width: 70%; /* ширина завдання */
+  transition: background-color 0.5s ease, border-left-color 0.5s ease;
+}
+
+.task.easy { border-left-color: #2ecc71; }
+.task.medium { border-left-color: #f39c12; }
+.task.hard { border-left-color: #e74c3c; }
+
+/* Підсвічування завершеного завдання */
+.task.completed {
+  background: #e6f9e6;
+  transition: background-color 0.5s ease;
+}
+
+textarea{
+   padding: 6px 10px;
+   margin: 20px;
+   width: 400px;
+   height: 150px;
+}
+
+/* ===========    ПІДКАЗКА ================================= */
+.hint {
+  background: #f9f9f9;
+  border-left: 4px solid #3498db;
+  padding: 10px;
+  margin-top: 10px;
+  display: none;
+  font-size: 0.9em;
+}
+
+/* ============    FADE-IN ДЛЯ ПРАВОЇ КОЛОНКИ ================================= */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.fade-in.show {
+  opacity: 1;
+}
+
+/* ============================= */
+/* ПРОГРЕС УРОКУ */
+/* ============================= */
+
+.lesson-progress {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f5f7fb;
+  box-shadow: inset 0 0 0 1px #e0e6f0;
+}
+
+.lesson-progress-title {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.lesson-progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #dde3ee;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.lesson-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4caf50, #7adf9a);
+  transition: width 0.4s ease;
+}
+
